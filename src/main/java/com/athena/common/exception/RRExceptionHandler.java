@@ -15,33 +15,33 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  */
 @RestControllerAdvice
 public class RRExceptionHandler {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * 处理自定义异常
 	 */
 	@ExceptionHandler(RRException.class)
-	public Result handleRRException(RRException e){
-
+	public Result<Object> handleRRException(RRException e){
 		return Result.error(e.getCode(), e.getMsg());
 	}
 
 	@ExceptionHandler(NoHandlerFoundException.class)
-	public Result handlerNoFoundException(Exception e) {
+	public Result<Object> handlerNoFoundException(Exception e) {
 		logger.error(e.getMessage(), e);
 		return Result.error(404, "路径不存在，请检查路径是否正确");
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
-	public Result handleDuplicateKeyException(DuplicateKeyException e){
+	public Result<Object> handleDuplicateKeyException(DuplicateKeyException e){
 		logger.error(e.getMessage(), e);
 		return Result.error("数据库中已存在该记录");
 	}
 
 
 	@ExceptionHandler(Exception.class)
-	public Result handleException(Exception e){
+	public Result<Object> handleException(Exception e){
 		logger.error(e.getMessage(), e);
-		return Result.error();
+		return Result.error(e.getMessage());
 	}
 }

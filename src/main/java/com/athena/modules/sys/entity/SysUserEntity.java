@@ -1,8 +1,7 @@
 package com.athena.modules.sys.entity;
 
-import com.athena.common.po.BasePo;
+import com.athena.common.base.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.athena.common.validator.group.AddGroup;
 import com.athena.common.validator.group.UpdateGroup;
@@ -13,7 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**

@@ -1,7 +1,6 @@
 package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.SysLog;
-import com.athena.common.constant.Constant;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.Assert;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 系统用户
@@ -39,14 +37,10 @@ public class SysUserController extends AbstractController {
 	 * 所有用户列表
 	 */
 	@GetMapping("/list")
-	//@RequiresPermissions("sys:user:list")
+	//@PreAuthorize("hasAuthority('sys:user:list')")
 	public Result<PageUtils> list(@RequestParam Map<String, Object> params){
-		//只有超级管理员，才能查看所有管理员列表
-		if(!Objects.equals(getUserId(), Constant.SUPER_ADMIN)){
-			params.put("createUserId", getUserId());
-		}
-		PageUtils page = sysUserService.queryPage(params);
 
+		PageUtils page = sysUserService.queryPage(params);
 		return Result.ok(page);
 	}
 	
@@ -83,7 +77,7 @@ public class SysUserController extends AbstractController {
 	 * 用户信息
 	 */
 	@GetMapping("/info/{userId}")
-	//@RequiresPermissions("sys:user:info")
+	//@PreAuthorize("hasAuthority('sys:user:info')")
 	public Result<SysUserEntity> info(@PathVariable("userId") String userId){
 		SysUserEntity user = sysUserService.getById(userId);
 		
@@ -99,7 +93,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("保存用户")
 	@PostMapping("/save")
-	//@RequiresPermissions("sys:user:save")
+	//@PreAuthorize("hasAuthority('sys:user:save')")
 	public Result<Object> save(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
@@ -113,7 +107,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改用户")
 	@PostMapping("/update")
-	//@RequiresPermissions("sys:user:update")
+	//@PreAuthorize("hasAuthority('sys:user:update')")
 	public Result<Object> update(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
@@ -127,7 +121,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("删除用户")
 	@PostMapping("/delete")
-	//@RequiresPermissions("sys:user:delete")
+	//@PreAuthorize("hasAuthority('sys:user:delete')")
 	public Result<Object> delete(@RequestBody String[] userIds){
 		if(ArrayUtils.contains(userIds, 1L)){
 			return Result.error("系统管理员不能删除");

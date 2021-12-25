@@ -4,11 +4,11 @@
 <mapper namespace="com.athena.modules.sys.mapper.SysPermissionMapper">
 
 	<select id="queryListParentId" resultType="com.athena.modules.sys.entity.SysPermissionEntity">
-		select * from sys_menu where parent_id = #{parentId} order by order_num asc
+		select * from sys_permission where parent_id = #{parentId} order by order_num asc
 	</select>
 
 	<select id="queryNotButtonList" resultType="com.athena.modules.sys.entity.SysPermissionEntity">
-		select * from sys_menu where type != 2 order by order_num asc
+		select * from sys_permission where type != 2 order by order_num asc
 	</select>
 	<select id="queryAllMenuId" resultType="java.lang.String">
 		select distinct rm.permission_id from sys_user_role ur

@@ -1,8 +1,7 @@
 package com.athena.modules.sys.entity;
 
-import com.athena.common.po.BasePo;
+import com.athena.common.base.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

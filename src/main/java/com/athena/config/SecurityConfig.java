@@ -8,6 +8,7 @@ import com.athena.common.utils.RedisUtils;
 import com.athena.common.utils.Result;
 import com.athena.filter.JwtAuthenticationTokenFilter;
 import com.athena.modules.sys.form.LoginUser;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.annotation.Resource;
 import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * @author sunjie
@@ -60,11 +62,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     LoginUser loginUser = (LoginUser) authentication.getPrincipal();
                     String token = JwtUtils.generateToken(loginUser.getUsername(), loginUser.getPassword());
                     redisUtils.set(RedisConstant.PREFIX_USER_TOKEN + token, token, JwtUtils.EXPIRE*2 / 1000);
+                    Map<String, Object> result = Maps.newHashMap();
+                    result.put("token", token);
+                    result.put("userInfo", loginUser.getUser());
+
 
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setStatus(HttpStatus.OK.value());
                     PrintWriter out = response.getWriter();
-                    out.write(JSON.toJSONString(Result.ok( "login success", token)));
+                    out.write(JSON.toJSONString(Result.ok( "login success", result)));
                     out.flush();
                     out.close();
                 }).failureHandler((request, response, exception) -> {
@@ -100,13 +106,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout()
                 .logoutSuccessHandler((request, response, authentication) -> {
                     String accessToken = request.getHeader(SecurityConstant.X_ACCESS_TOKEN);
-                    if(!StringUtils.isBlank(accessToken)) {
+                    if(StringUtils.isNotBlank(accessToken)) {
                         redisUtils.delete(RedisConstant.PREFIX_USER_TOKEN + accessToken);
                     }
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.setStatus(HttpStatus.OK.value());
                     PrintWriter out = response.getWriter();
-                    out.write(JSON.toJSONString(Result.error(HttpStatus.UNAUTHORIZED.value(), "logout success")));
+                    out.write(JSON.toJSONString(Result.error(HttpStatus.OK.value(), "logout success")));
                     out.flush();
                     out.close();
                 }).permitAll();

@@ -1,6 +1,7 @@
 package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.SysLog;
+import com.athena.common.base.tree.BaseTree;
 import com.athena.common.constant.Constant;
 import com.athena.common.exception.RRException;
 import com.athena.common.utils.Result;
@@ -12,7 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 系统菜单
@@ -20,7 +23,7 @@ import java.util.*;
  * @author sunjie
  */
 @RestController
-@RequestMapping("/sys/menu")
+@RequestMapping("/sys/permission")
 public class SysPermissionController extends AbstractController {
 	@Autowired
 	private SysPermissionService sysPermissionService;
@@ -32,10 +35,10 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/nav")
 	public Result nav(){
-		List<SysPermissionEntity> menuList = sysPermissionService.getUserMenuList(getUserId());
-		Set<String> permissions = shiroService.getUserPermissions(getUserId());
+		List<BaseTree<SysPermissionEntity>> menuTree = sysPermissionService.getUserMenuTree(getUsername());
+		Set<String> permissions = shiroService.getUserPermissions(getUsername());
 		Map<String, Object> result = Maps.newHashMap();
-		result.put("menuList", menuList);
+		result.put("menuTree", menuTree);
 		result.put("permissions", permissions);
 		return Result.ok(result);
 	}
@@ -44,28 +47,17 @@ public class SysPermissionController extends AbstractController {
 	 * 所有菜单列表
 	 */
 	@GetMapping("/list")
-	//@RequiresPermissions("sys:menu:list")
-	public List<SysPermissionEntity> list(){
-		List<SysPermissionEntity> menuList = sysPermissionService.list();
-		HashMap<String, SysPermissionEntity> menuMap = new HashMap<>(12);
-		for (SysPermissionEntity s : menuList) {
-			menuMap.put(s.getId(), s);
-		}
-		for (SysPermissionEntity s : menuList) {
-			SysPermissionEntity parent = menuMap.get(s.getParentId());
-			if (Objects.nonNull(parent)) {
-				s.setParentName(parent.getName());
-			}
-
-		}
-		return menuList;
+	//@PreAuthorize("hasAuthority('sys:menu:list')")
+	public Result<List<BaseTree<SysPermissionEntity>>> list(){
+		List<BaseTree<SysPermissionEntity>> menuList = sysPermissionService.permissionTree();
+		return Result.ok(menuList);
 	}
 	
 	/**
 	 * 选择菜单(添加、修改菜单)
 	 */
 	@GetMapping("/select")
-	//@RequiresPermissions("sys:menu:select")
+	//@PreAuthorize("hasAuthority('sys:menu:select')")
 	public Result<List<SysPermissionEntity>> select(){
 		//查询列表数据
 		List<SysPermissionEntity> menuList = sysPermissionService.queryNotButtonList();
@@ -85,7 +77,7 @@ public class SysPermissionController extends AbstractController {
 	 * 菜单信息
 	 */
 	@GetMapping("/info/{menuId}")
-	//@RequiresPermissions("sys:menu:info")
+	//@PreAuthorize("hasAuthority('sys:menu:info')")
 	public Result<SysPermissionEntity> info(@PathVariable("menuId") Long menuId){
 		SysPermissionEntity menu = sysPermissionService.getById(menuId);
 		return Result.ok(menu);
@@ -96,7 +88,7 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@SysLog("保存菜单")
 	@PostMapping("/save")
-	//@RequiresPermissions("sys:menu:save")
+	//@PreAuthorize("hasAuthority('sys:menu:save')")
 	public Result<Object> save(@RequestBody SysPermissionEntity menu){
 		//数据校验
 		verifyForm(menu);
@@ -111,7 +103,7 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@SysLog("修改菜单")
 	@PostMapping("/update")
-	//@RequiresPermissions("sys:menu:update")
+	//@PreAuthorize("hasAuthority('sys:menu:update')")
 	public Result<Object> update(@RequestBody SysPermissionEntity menu){
 		//数据校验
 		verifyForm(menu);
@@ -126,7 +118,7 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@SysLog("删除菜单")
 	@PostMapping("/delete/{menuId}")
-	//@RequiresPermissions("sys:menu:delete")
+	//@PreAuthorize("hasAuthority('sys:menu:delete')")
 	public Result<Object> delete(@PathVariable("menuId") String menuId){
 
 		//判断是否有子菜单或按钮

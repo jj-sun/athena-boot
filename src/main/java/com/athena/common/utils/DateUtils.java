@@ -155,4 +155,12 @@ public class DateUtils {
         DateTime dateTime = new DateTime(date);
         return dateTime.plusYears(years).toDate();
     }
+
+    /**
+     * 当前日期
+     * @return
+     */
+    public static Date now() {
+        return new Date();
+    }
 }

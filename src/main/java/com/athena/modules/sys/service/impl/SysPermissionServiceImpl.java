@@ -1,18 +1,25 @@
 package com.athena.modules.sys.service.impl;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.athena.common.base.tree.BaseTree;
 import com.athena.common.constant.Constant;
+import com.athena.common.utils.MapUtils;
+import com.athena.common.utils.TreeUtils;
+import com.athena.modules.sys.entity.SysPermissionEntity;
+import com.athena.modules.sys.mapper.SysPermissionMapper;
 import com.athena.modules.sys.service.SysPermissionService;
 import com.athena.modules.sys.service.SysRolePermissionService;
-import com.athena.common.utils.MapUtils;
-import com.athena.modules.sys.mapper.SysPermissionMapper;
-import com.athena.modules.sys.entity.SysPermissionEntity;
+import com.athena.modules.sys.vo.SysMenuTree;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service("sysMenuService")
@@ -20,7 +27,17 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
 	@Autowired
 	private SysRolePermissionService sysRolePermissionService;
-	
+
+	@Override
+	public List<BaseTree<SysPermissionEntity>> permissionTree() {
+		List<SysPermissionEntity> sysPermissionEntities = this.list();
+		List<BaseTree<SysPermissionEntity>> menuTreeList = Lists.newArrayList();
+		if(!CollectionUtils.isEmpty(sysPermissionEntities)) {
+			sysPermissionEntities.forEach(sysPermissionEntity -> menuTreeList.add(new SysMenuTree(sysPermissionEntity)));
+		}
+		return TreeUtils.buildTree(menuTreeList);
+	}
+
 	@Override
 	public List<SysPermissionEntity> queryListParentId(String parentId, List<String> menuIdList) {
 		List<SysPermissionEntity> menuList = queryListParentId(parentId);
@@ -48,44 +65,27 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 
 	@Override
-	public List<SysPermissionEntity> getUserMenuList(String userId) {
+	public List<BaseTree<SysPermissionEntity>> getUserMenuTree(String username) {
+		List<SysPermissionEntity> sysPermissionEntities;
 		//系统管理员，拥有最高权限
-		if(userId == Constant.SUPER_ADMIN){
-			return getMenuList(null);
+		if(username.equals(Constant.SUPER_ADMIN)){
+			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON));
+		} else {
+			//用户菜单列表
+			List<String> menuIdList = this.getBaseMapper().queryAllMenuId(username);
+			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().in(SysPermissionEntity::getId, menuIdList).ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON));
 		}
-		
-		//用户菜单列表
-		List<String> menuIdList = this.getBaseMapper().queryAllMenuId(userId);
-		return getMenuList(menuIdList);
-	}
 
-	/**
-	 * 获取拥有的菜单列表
-	 * @param menuIdList
-	 * @return
-	 */
-	private List<SysPermissionEntity> getMenuList(List<String> menuIdList) {
-		// 查询拥有的所有菜单
-		List<SysPermissionEntity> menus = this.baseMapper.selectList(new QueryWrapper<SysPermissionEntity>()
-				.in(Objects.nonNull(menuIdList), "menu_id", menuIdList).in("type", 0, 1));
-		// 将id和菜单绑定
-		HashMap<String, SysPermissionEntity> menuMap = new HashMap<>(12);
-		for (SysPermissionEntity s : menus) {
-			menuMap.put(s.getId(), s);
-		}
-		// 使用迭代器,组装菜单的层级关系
-		Iterator<SysPermissionEntity> iterator = menus.iterator();
-		while (iterator.hasNext()) {
-			SysPermissionEntity menu = iterator.next();
-			SysPermissionEntity parent = menuMap.get(menu.getParentId());
-			if (Objects.nonNull(parent)) {
-				parent.getList().add(menu);
-				// 将这个菜单从当前节点移除
-				iterator.remove();
+		List<BaseTree<SysPermissionEntity>> menuTreeList = Lists.newArrayList();
+		if(!CollectionUtils.isEmpty(sysPermissionEntities)) {
+			sysPermissionEntities.forEach(sysPermissionEntity -> menuTreeList.add(new SysMenuTree(sysPermissionEntity)));
+			List<BaseTree<SysPermissionEntity>> root = menuTreeList.stream().filter(sysMenuTree -> sysMenuTree.getParentKey().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
+			if(!CollectionUtils.isEmpty(root)) {
+				TreeUtils.buildTree(root, menuTreeList);
+				return root;
 			}
 		}
-
-		return menus;
+		return null;
 	}
 
 	@Override

@@ -8,6 +8,8 @@ package com.athena.common.constant;
 public class Constant {
 	/** 超级管理员ID */
 	public static final String SUPER_ADMIN = "admin";
+
+    public static final String TREE_ROOT = "0";
     /**
      * 当前页码
      */
@@ -116,4 +118,43 @@ public class Constant {
         }
     }
 
+
+    public enum DelFlag {
+        /**
+         * 正常
+         */
+        DEL_FLAG_0(0),
+        /**
+         * 禁用
+         */
+        DEL_FLAG_1(1);
+
+        private final int value;
+        DelFlag(int value) {
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+
+    }
+
+    public enum PermissionType {
+        /**
+         * 权限类型
+         */
+        LIST(0, "目录"),
+        MENU(1, "菜单"),
+        BUTTON(2, "按钮");
+        private int value;
+        private String name;
+        PermissionType(int value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+        public int getValue() {
+            return value;
+        }
+
+    }
 }

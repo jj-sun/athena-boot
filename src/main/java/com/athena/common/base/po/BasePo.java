@@ -1,4 +1,4 @@
-package com.athena.common.po;
+package com.athena.common.base.po;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;

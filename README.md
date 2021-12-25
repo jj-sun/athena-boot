@@ -20,7 +20,7 @@
 
 **项目结构** 
 ```
-renren-fast
+athena-boot
 ├─db  项目SQL语句
 │
 ├─common 公共模块

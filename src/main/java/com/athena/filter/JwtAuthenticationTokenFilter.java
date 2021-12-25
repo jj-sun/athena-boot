@@ -6,6 +6,7 @@ import com.athena.common.utils.JwtUtils;
 import com.athena.common.utils.RedisUtils;
 import com.athena.modules.sys.entity.SysUserEntity;
 import com.athena.modules.sys.form.LoginUser;
+import com.athena.modules.sys.service.ShiroService;
 import com.athena.modules.sys.service.SysUserService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author sunjie
@@ -40,6 +42,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private ShiroService shiroService;
 
     @Resource
     private RedisUtils redisUtils;
@@ -68,7 +73,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            List<String> perms = sysUserService.queryAllPerms(sysUserEntity.getId());
+            Set<String> perms = shiroService.getUserPermissions(sysUserEntity.getUsername());
             LoginUser loginUser = new LoginUser();
             loginUser.setUser(sysUserEntity);
             loginUser.setPermissions(new HashSet<>(perms));
