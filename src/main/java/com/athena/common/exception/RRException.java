@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.athena.common.exception;
+
+import java.io.Serial;
 
 /**
  * 自定义异常
@@ -14,6 +8,8 @@ package com.athena.common.exception;
  * @author sunjie
  */
 public class RRException extends RuntimeException {
+
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
     private String msg;

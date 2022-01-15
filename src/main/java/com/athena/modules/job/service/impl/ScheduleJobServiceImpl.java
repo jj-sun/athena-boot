@@ -1,16 +1,16 @@
 package com.athena.modules.job.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.constant.Constant;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
 import com.athena.modules.job.entity.ScheduleJobEntity;
-import com.athena.modules.job.utils.ScheduleUtils;
 import com.athena.modules.job.mapper.ScheduleJobMapper;
 import com.athena.modules.job.service.ScheduleJobService;
-import org.apache.commons.lang.StringUtils;
+import com.athena.modules.job.utils.ScheduleUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +43,11 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 	}
 
 	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
-		String beanName = (String)params.get("beanName");
+	public PageUtils queryPage(ScheduleJobEntity scheduleJob, PageDto pageDto) {
 
 		IPage<ScheduleJobEntity> page = this.page(
-			new Query<ScheduleJobEntity>().getPage(params),
-			new QueryWrapper <ScheduleJobEntity>().like(StringUtils.isNotBlank(beanName),"bean_name", beanName)
+			new Query<ScheduleJobEntity>().getPage(pageDto),
+			new QueryWrapper <ScheduleJobEntity>()
 		);
 
 		return new PageUtils(page);

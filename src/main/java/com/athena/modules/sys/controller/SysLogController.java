@@ -1,16 +1,14 @@
 package com.athena.modules.sys.controller;
 
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
+import com.athena.modules.sys.entity.SysLogEntity;
 import com.athena.modules.sys.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 
 /**
@@ -29,8 +27,8 @@ public class SysLogController {
 	 */
 	@GetMapping("/list")
 	//@PreAuthorize("hasAuthority('sys:log:list')")
-	public Result<PageUtils> list(@RequestParam Map<String, Object> params){
-		PageUtils page = sysLogService.queryPage(params);
+	public Result<PageUtils> list(SysLogEntity sysLog, PageDto pageDto){
+		PageUtils page = sysLogService.queryPage(sysLog, pageDto);
 		return Result.ok(page);
 	}
 	

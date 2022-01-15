@@ -38,7 +38,7 @@ public class SysUserEntity extends BasePo implements Serializable {
 	/**
 	 * 密码
 	 */
-	@NotBlank(message="密码不能为空", groups = AddGroup.class)
+	//@NotBlank(message="密码不能为空", groups = AddGroup.class)
 	private String password;
 
 	/**

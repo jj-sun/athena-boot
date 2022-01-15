@@ -38,7 +38,6 @@
 		<hutool.version>5.7.17</hutool.version>
 		<lombok.version>1.18.22</lombok.version>
 		<guava.version>31.0.1-jre</guava.version>
-		<validator.version>7.0.1.Final</validator.version>
 
 		<!--wagon plugin 配置-->
 		<service-path>/work/renren</service-path>
@@ -49,6 +48,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -86,6 +90,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>org.springframework.boot</groupId>-->
@@ -214,7 +222,10 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>${validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>jakarta.el</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -242,6 +253,13 @@
 					<source>17</source>
 					<target>17</target>
 					<encoding>UTF-8</encoding>
+					<!--<annotationProcessorPaths>
+						<path>
+							<groupId>org.hibernate.validator</groupId>
+							<artifactId>hibernate-validator</artifactId>
+							<version>${validator.version}</version>
+						</path>
+					</annotationProcessorPaths>-->
 				</configuration>
 			</plugin>
 			<!-- 跳过单元测试 -->

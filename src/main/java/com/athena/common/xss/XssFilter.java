@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.athena.common.xss;
 
 import javax.servlet.*;
@@ -23,6 +15,7 @@ public class XssFilter implements Filter {
 	public void init(FilterConfig config) throws ServletException {
 	}
 
+	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 		XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper(

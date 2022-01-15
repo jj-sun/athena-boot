@@ -1,11 +1,11 @@
 package com.athena.modules.sys.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.modules.sys.entity.SysUserEntity;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface SysUserService extends IService<SysUserEntity> {
 
-	PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(SysUserEntity user, PageDto pageDto);
 
 	/**
 	 * 查询用户的所有权限
@@ -41,7 +41,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 删除用户
 	 */
-	void deleteBatch(String[] userIds);
+	void deleteBatch(List<String> ids);
 
 	/**
 	 * 修改密码

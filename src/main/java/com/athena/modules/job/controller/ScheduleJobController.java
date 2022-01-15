@@ -1,5 +1,6 @@
 package com.athena.modules.job.controller;
 
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.ValidatorUtils;
@@ -27,8 +28,8 @@ public class ScheduleJobController {
 	 */
 	@RequestMapping("/list")
 	//@RequiresPermissions("sys:schedule:list")
-	public Result list(@RequestParam Map<String, Object> params){
-		PageUtils page = scheduleJobService.queryPage(params);
+	public Result list(ScheduleJobEntity scheduleJob, PageDto pageDto){
+		PageUtils page = scheduleJobService.queryPage(scheduleJob, pageDto);
 
 		return Result.ok(page);
 	}

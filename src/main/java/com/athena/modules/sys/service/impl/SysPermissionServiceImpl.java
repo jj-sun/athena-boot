@@ -69,11 +69,11 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 		List<SysPermissionEntity> sysPermissionEntities;
 		//系统管理员，拥有最高权限
 		if(username.equals(Constant.SUPER_ADMIN)){
-			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON));
+			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON.getValue()));
 		} else {
 			//用户菜单列表
 			List<String> menuIdList = this.getBaseMapper().queryAllMenuId(username);
-			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().in(SysPermissionEntity::getId, menuIdList).ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON));
+			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().in(SysPermissionEntity::getId, menuIdList).ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON.getValue()));
 		}
 
 		List<BaseTree<SysPermissionEntity>> menuTreeList = Lists.newArrayList();

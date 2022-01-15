@@ -1,6 +1,7 @@
 package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.SysLog;
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.Assert;
@@ -11,13 +12,12 @@ import com.athena.modules.sys.entity.SysUserEntity;
 import com.athena.modules.sys.form.PasswordForm;
 import com.athena.modules.sys.service.SysUserRoleService;
 import com.athena.modules.sys.service.SysUserService;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统用户
@@ -38,9 +38,8 @@ public class SysUserController extends AbstractController {
 	 */
 	@GetMapping("/list")
 	//@PreAuthorize("hasAuthority('sys:user:list')")
-	public Result<PageUtils> list(@RequestParam Map<String, Object> params){
-
-		PageUtils page = sysUserService.queryPage(params);
+	public Result<PageUtils> list(SysUserEntity user, PageDto pageDto){
+		PageUtils page = sysUserService.queryPage(user, pageDto);
 		return Result.ok(page);
 	}
 	
@@ -120,19 +119,18 @@ public class SysUserController extends AbstractController {
 	 * 删除用户
 	 */
 	@SysLog("删除用户")
-	@PostMapping("/delete")
+	@DeleteMapping("/delete")
 	//@PreAuthorize("hasAuthority('sys:user:delete')")
-	public Result<Object> delete(@RequestBody String[] userIds){
-		if(ArrayUtils.contains(userIds, 1L)){
-			return Result.error("系统管理员不能删除");
-		}
+	public Result<Object> delete(@RequestParam(name = "id") String id){
 		
-		if(ArrayUtils.contains(userIds, getUserId())){
-			return Result.error("当前用户不能删除");
-		}
-		
-		sysUserService.deleteBatch(userIds);
-		
+		sysUserService.removeById(id);
+		return Result.ok();
+	}
+
+	@SysLog("批量删除用户")
+	@DeleteMapping("/deleteBatch")
+	public Result<Object> deleteBatch(@RequestParam(name = "ids") String ids) {
+		sysUserService.deleteBatch(Arrays.asList(ids.split(",")));
 		return Result.ok();
 	}
 }

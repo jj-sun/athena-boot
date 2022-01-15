@@ -1,5 +1,7 @@
 package com.athena.common.base.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
@@ -20,14 +22,14 @@ public class BasePo implements Serializable {
 
     @TableId
     private String id;
-
+    @TableField(fill = FieldFill.INSERT)
     private String creator;
-
+    @TableField(fill = FieldFill.INSERT)
     private Date ctime;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String editor;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date mtime;
-
+    @TableField(fill = FieldFill.INSERT)
     private Integer delFlag;
 }

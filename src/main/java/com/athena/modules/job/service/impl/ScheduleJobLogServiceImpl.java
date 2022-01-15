@@ -1,36 +1,25 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.athena.modules.job.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
 import com.athena.modules.job.entity.ScheduleJobLogEntity;
 import com.athena.modules.job.mapper.ScheduleJobLogMapper;
 import com.athena.modules.job.service.ScheduleJobLogService;
-import org.apache.commons.lang.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service("scheduleJobLogService")
 public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogMapper, ScheduleJobLogEntity> implements ScheduleJobLogService {
 
 	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
-		String jobId = (String)params.get("jobId");
+	public PageUtils queryPage(ScheduleJobLogEntity scheduleJobLog, PageDto pageDto) {
 
 		IPage<ScheduleJobLogEntity> page = this.page(
-			new Query<ScheduleJobLogEntity>().getPage(params),
-			new QueryWrapper<ScheduleJobLogEntity>().like(StringUtils.isNotBlank(jobId),"job_id", jobId)
+			new Query<ScheduleJobLogEntity>().getPage(pageDto),
+			new QueryWrapper<ScheduleJobLogEntity>()
 		);
 
 		return new PageUtils(page);

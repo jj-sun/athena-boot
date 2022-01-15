@@ -17,7 +17,7 @@ public class Constant {
     /**
      * 每页显示记录数
      */
-    public static final String LIMIT = "limit";
+    public static final String PAGE_SIZE = "pageSize";
     /**
      * 排序字段
      */

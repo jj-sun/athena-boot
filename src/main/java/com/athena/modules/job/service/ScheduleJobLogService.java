@@ -1,10 +1,9 @@
 package com.athena.modules.job.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.modules.job.entity.ScheduleJobLogEntity;
-
-import java.util.Map;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * 定时任务日志
@@ -13,6 +12,6 @@ import java.util.Map;
  */
 public interface ScheduleJobLogService extends IService<ScheduleJobLogEntity> {
 
-	PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(ScheduleJobLogEntity scheduleJobLog, PageDto pageDto);
 	
 }

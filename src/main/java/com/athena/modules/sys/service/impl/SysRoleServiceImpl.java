@@ -1,24 +1,23 @@
 package com.athena.modules.sys.service.impl;
 
-import com.athena.modules.sys.service.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.athena.common.constant.Constant;
+import com.athena.common.base.dto.PageDto;
+import com.athena.common.exception.RRException;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
-import com.athena.common.exception.RRException;
-import com.athena.modules.sys.mapper.SysRoleMapper;
 import com.athena.modules.sys.entity.SysRoleEntity;
-import org.apache.commons.lang.StringUtils;
+import com.athena.modules.sys.mapper.SysRoleMapper;
+import com.athena.modules.sys.service.SysPermissionService;
+import com.athena.modules.sys.service.SysRolePermissionService;
+import com.athena.modules.sys.service.SysRoleService;
+import com.athena.modules.sys.service.SysUserRoleService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 角色
@@ -36,15 +35,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
 	private SysPermissionService sysPermissionService;
 
 	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
-		String roleName = (String)params.get("roleName");
-		Long createUserId = (Long)params.get("createUserId");
+	public PageUtils queryPage(SysRoleEntity role, PageDto pageDto) {
 
 		IPage<SysRoleEntity> page = this.page(
-			new Query<SysRoleEntity>().getPage(params),
-			new QueryWrapper<SysRoleEntity>()
-				.like(StringUtils.isNotBlank(roleName),"role_name", roleName)
-				.eq(createUserId != null,"create_user_id", createUserId)
+			new Query<SysRoleEntity>().getPage(pageDto)
 		);
 
 		return new PageUtils(page);

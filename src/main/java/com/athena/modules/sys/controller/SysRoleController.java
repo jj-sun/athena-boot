@@ -1,6 +1,7 @@
 package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.SysLog;
+import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.ValidatorUtils;
@@ -33,9 +34,9 @@ public class SysRoleController extends AbstractController {
 	 */
 	@GetMapping("/list")
 	//@PreAuthorize("hasAuthority('sys:role:list')")
-	public Result<PageUtils> list(@RequestParam Map<String, Object> params){
+	public Result<PageUtils> list(SysRoleEntity role, PageDto pageDto){
 
-		PageUtils page = sysRoleService.queryPage(params);
+		PageUtils page = sysRoleService.queryPage(role, pageDto);
 
 		return Result.ok(page);
 	}
