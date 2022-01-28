@@ -1,9 +1,9 @@
 package com.athena.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.athena.modules.sys.mapper.SysRolePermissionMapper;
 import com.athena.modules.sys.entity.SysRolePermissionEntity;
+import com.athena.modules.sys.mapper.SysRolePermissionMapper;
 import com.athena.modules.sys.service.SysRolePermissionService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +21,18 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void saveOrUpdate(String roleId, List<String> menuIdList) {
+	public void saveOrUpdate(String roleId, List<String> permissionIds) {
 		//先删除角色与菜单关系
-		deleteBatch(new String[]{roleId});
+		deleteBatch(List.of(roleId));
 
-		if(menuIdList.size() == 0){
+		if(permissionIds.size() == 0){
 			return ;
 		}
 
 		//保存角色与菜单关系
-		for(String menuId : menuIdList){
+		for(String permissionId : permissionIds){
 			SysRolePermissionEntity sysRolePermissionEntity = new SysRolePermissionEntity();
-			sysRolePermissionEntity.setId(menuId);
+			sysRolePermissionEntity.setPermissionId(permissionId);
 			sysRolePermissionEntity.setRoleId(roleId);
 
 			this.save(sysRolePermissionEntity);
@@ -40,12 +40,12 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 	}
 
 	@Override
-	public List<String> queryMenuIdList(String roleId) {
-		return baseMapper.queryMenuIdList(roleId);
+	public List<String> queryPermissionIdList(String roleId) {
+		return baseMapper.queryPermissionIdList(roleId);
 	}
 
 	@Override
-	public int deleteBatch(String[] roleIds){
+	public int deleteBatch(List<String> roleIds){
 		return baseMapper.deleteBatch(roleIds);
 	}
 

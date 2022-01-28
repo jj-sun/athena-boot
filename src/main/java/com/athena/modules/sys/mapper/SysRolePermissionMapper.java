@@ -1,11 +1,3 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.athena.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -25,10 +17,10 @@ public interface SysRolePermissionMapper extends BaseMapper<SysRolePermissionEnt
 	/**
 	 * 根据角色ID，获取菜单ID列表
 	 */
-	List<String> queryMenuIdList(String roleId);
+	List<String> queryPermissionIdList(String roleId);
 
 	/**
 	 * 根据角色ID数组，批量删除
 	 */
-	int deleteBatch(String[] roleIds);
+	int deleteBatch(List<String> roleIds);
 }

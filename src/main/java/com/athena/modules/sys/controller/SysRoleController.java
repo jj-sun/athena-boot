@@ -2,19 +2,20 @@ package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.SysLog;
 import com.athena.common.base.dto.PageDto;
+import com.athena.common.base.select.BaseSelect;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.ValidatorUtils;
 import com.athena.modules.sys.entity.SysRoleEntity;
 import com.athena.modules.sys.service.SysRolePermissionService;
 import com.athena.modules.sys.service.SysRoleService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 角色管理
@@ -46,12 +47,13 @@ public class SysRoleController extends AbstractController {
 	 */
 	@GetMapping("/select")
 	//@PreAuthorize("hasAuthority('sys:role:select')")
-	public Result<List<SysRoleEntity>> select(){
-		Map<String, Object> map = new HashMap<>();
-
-		List<SysRoleEntity> list = (List<SysRoleEntity>) sysRoleService.listByMap(map);
-		
-		return Result.ok(list);
+	public Result<List<BaseSelect>> select(){
+		List<SysRoleEntity> list = sysRoleService.list();
+		List<BaseSelect> selectList = Lists.newArrayList();
+		if(!CollectionUtils.isEmpty(list)) {
+			list.forEach(role -> selectList.add(new BaseSelect(role.getRoleName(), role.getId())));
+		}
+		return Result.ok(selectList);
 	}
 	
 	/**
@@ -63,8 +65,8 @@ public class SysRoleController extends AbstractController {
 		SysRoleEntity role = sysRoleService.getById(roleId);
 		
 		//查询角色对应的菜单
-		List<String> menuIdList = sysRolePermissionService.queryMenuIdList(roleId);
-		role.setMenuIdList(menuIdList);
+		/*List<String> menuIdList = sysRolePermissionService.queryMenuIdList(roleId);
+		role.setMenuIdList(menuIdList);*/
 		
 		return Result.ok(role);
 	}
@@ -78,7 +80,7 @@ public class SysRoleController extends AbstractController {
 	public Result<Object> save(@RequestBody SysRoleEntity role){
 		ValidatorUtils.validateEntity(role);
 		
-		sysRoleService.saveRole(role);
+		sysRoleService.save(role);
 		
 		return Result.ok();
 	}
@@ -87,12 +89,12 @@ public class SysRoleController extends AbstractController {
 	 * 修改角色
 	 */
 	@SysLog("修改角色")
-	@PostMapping("/update")
+	@PutMapping("/update")
 	//@PreAuthorize("hasAuthority('sys:role:update')")
 	public Result<Object> update(@RequestBody SysRoleEntity role){
 		ValidatorUtils.validateEntity(role);
 		
-		sysRoleService.update(role);
+		sysRoleService.updateById(role);
 		
 		return Result.ok();
 	}
@@ -101,11 +103,17 @@ public class SysRoleController extends AbstractController {
 	 * 删除角色
 	 */
 	@SysLog("删除角色")
-	@PostMapping("/delete")
+	@DeleteMapping("/delete")
 	//@PreAuthorize("hasAuthority('sys:role:delete')")
-	public Result<Object> delete(@RequestBody String[] roleIds){
-		sysRoleService.deleteBatch(roleIds);
-		
+	public Result<Object> delete(@RequestParam(name = "id") String id){
+		sysRoleService.removeById(id);
+		return Result.ok();
+	}
+
+	@SysLog("批量删除角色")
+	@DeleteMapping("/deleteBatch")
+	public Result<Object> deleteBatch(@RequestParam(name = "ids") String ids) {
+		sysRoleService.deleteBatch(Arrays.asList(ids.split(",")));
 		return Result.ok();
 	}
 }

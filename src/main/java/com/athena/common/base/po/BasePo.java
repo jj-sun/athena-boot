@@ -1,5 +1,6 @@
 package com.athena.common.base.po;
 
+import com.athena.common.annotation.Dict;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -30,6 +31,7 @@ public class BasePo implements Serializable {
     private String editor;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date mtime;
+    @Dict(dicCode = "del_flag")
     @TableField(fill = FieldFill.INSERT)
     private Integer delFlag;
 }

@@ -6,10 +6,6 @@
 	<select id="queryListParentId" resultType="com.athena.modules.sys.entity.SysPermissionEntity">
 		select * from sys_permission where parent_id = #{parentId} order by order_num asc
 	</select>
-
-	<select id="queryNotButtonList" resultType="com.athena.modules.sys.entity.SysPermissionEntity">
-		select * from sys_permission where type != 2 order by order_num asc
-	</select>
 	<select id="queryAllMenuId" resultType="java.lang.String">
 		select distinct rm.permission_id from sys_user_role ur
 		LEFT JOIN sys_role_permission rm on ur.role_id = rm.role_id

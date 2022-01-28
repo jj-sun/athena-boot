@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
+
 
 package com.athena.modules.sys.service;
 
@@ -23,7 +17,7 @@ import java.util.List;
  */
 public interface SysPermissionService extends IService<SysPermissionEntity> {
 
-	List<BaseTree<SysPermissionEntity>> permissionTree();
+	List<SysPermissionEntity> permissionTree();
 
 	/**
 	 * 根据父菜单，查询子菜单
@@ -39,9 +33,9 @@ public interface SysPermissionService extends IService<SysPermissionEntity> {
 	List<SysPermissionEntity> queryListParentId(String parentId);
 	
 	/**
-	 * 获取不包含按钮的菜单列表
+	 * 获取菜单
 	 */
-	List<SysPermissionEntity> queryNotButtonList();
+	List<BaseTree<SysPermissionEntity>> treeSelect();
 	
 	/**
 	 * 获取用户菜单列表
@@ -51,10 +45,6 @@ public interface SysPermissionService extends IService<SysPermissionEntity> {
 	/**
 	 * 删除
 	 */
-	void delete(String menuId);
+	void delete(String permissionId);
 
-	/**
-	 * 查询用户的所有菜单ID
-	 */
-	List<String> queryAllMenuId(String username);
 }

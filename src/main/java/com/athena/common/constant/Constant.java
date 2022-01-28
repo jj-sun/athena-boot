@@ -30,6 +30,12 @@ public class Constant {
      *  升序
      */
     public static final String ASC = "asc";
+
+    /**
+     * 字典翻译文本后缀
+     */
+    public static final String DICT_TEXT_SUFFIX = "_dictText";
+
 	/**
 	 * 菜单类型
 	 * 

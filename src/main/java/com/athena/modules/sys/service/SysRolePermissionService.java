@@ -14,16 +14,16 @@ import java.util.List;
  */
 public interface SysRolePermissionService extends IService<SysRolePermissionEntity> {
 	
-	void saveOrUpdate(String roleId, List<String> menuIdList);
+	void saveOrUpdate(String roleId, List<String> permissionIds);
 	
 	/**
 	 * 根据角色ID，获取菜单ID列表
 	 */
-	List<String> queryMenuIdList(String roleId);
+	List<String> queryPermissionIdList(String roleId);
 
 	/**
 	 * 根据角色ID数组，批量删除
 	 */
-	int deleteBatch(String[] roleIds);
+	int deleteBatch(List<String> roleIds);
 	
 }

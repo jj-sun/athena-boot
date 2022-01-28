@@ -37,9 +37,16 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * 修改用户
 	 */
 	void update(SysUserEntity user);
-	
+
 	/**
-	 * 删除用户
+	 * 删除用户，同时删除用户和角色的关系
+	 * @param id
+	 * @return
+	 */
+	boolean deleteEntity(String id);
+
+	/**
+	 * 批量删除用户,同时删除用户和角色的关系
 	 */
 	void deleteBatch(List<String> ids);
 

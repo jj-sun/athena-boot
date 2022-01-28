@@ -6,7 +6,7 @@ import com.athena.common.constant.Constant;
 import com.athena.common.exception.RRException;
 import com.athena.common.utils.Result;
 import com.athena.modules.sys.entity.SysPermissionEntity;
-import com.athena.modules.sys.service.ShiroService;
+import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysPermissionService;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
@@ -28,15 +28,15 @@ public class SysPermissionController extends AbstractController {
 	@Autowired
 	private SysPermissionService sysPermissionService;
 	@Autowired
-	private ShiroService shiroService;
+	private SecurityService securityService;
 
 	/**
 	 * 导航菜单
 	 */
 	@GetMapping("/nav")
-	public Result nav(){
+	public Result<Map<String, Object>> nav(){
 		List<BaseTree<SysPermissionEntity>> menuTree = sysPermissionService.getUserMenuTree(getUsername());
-		Set<String> permissions = shiroService.getUserPermissions(getUsername());
+		Set<String> permissions = securityService.getUserPermissions(getUsername());
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("menuTree", menuTree);
 		result.put("permissions", permissions);
@@ -48,8 +48,8 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/list")
 	//@PreAuthorize("hasAuthority('sys:menu:list')")
-	public Result<List<BaseTree<SysPermissionEntity>>> list(){
-		List<BaseTree<SysPermissionEntity>> menuList = sysPermissionService.permissionTree();
+	public Result<List<SysPermissionEntity>> list(){
+		List<SysPermissionEntity> menuList = sysPermissionService.permissionTree();
 		return Result.ok(menuList);
 	}
 	
@@ -58,17 +58,9 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/select")
 	//@PreAuthorize("hasAuthority('sys:menu:select')")
-	public Result<List<SysPermissionEntity>> select(){
+	public Result<List<BaseTree<SysPermissionEntity>>> select(){
 		//查询列表数据
-		List<SysPermissionEntity> menuList = sysPermissionService.queryNotButtonList();
-		
-		//添加顶级菜单
-		SysPermissionEntity root = new SysPermissionEntity();
-		root.setId("0");
-		root.setName("一级菜单");
-		root.setParentId("-1");
-		root.setOpen(true);
-		menuList.add(root);
+		List<BaseTree<SysPermissionEntity>> menuList = sysPermissionService.treeSelect();
 		
 		return Result.ok(menuList);
 	}
@@ -76,10 +68,10 @@ public class SysPermissionController extends AbstractController {
 	/**
 	 * 菜单信息
 	 */
-	@GetMapping("/info/{menuId}")
+	@GetMapping("/info/{id}")
 	//@PreAuthorize("hasAuthority('sys:menu:info')")
-	public Result<SysPermissionEntity> info(@PathVariable("menuId") Long menuId){
-		SysPermissionEntity menu = sysPermissionService.getById(menuId);
+	public Result<SysPermissionEntity> info(@PathVariable("id") String id){
+		SysPermissionEntity menu = sysPermissionService.getById(id);
 		return Result.ok(menu);
 	}
 	
@@ -102,7 +94,7 @@ public class SysPermissionController extends AbstractController {
 	 * 修改
 	 */
 	@SysLog("修改菜单")
-	@PostMapping("/update")
+	@PutMapping("/update")
 	//@PreAuthorize("hasAuthority('sys:menu:update')")
 	public Result<Object> update(@RequestBody SysPermissionEntity menu){
 		//数据校验
@@ -117,17 +109,17 @@ public class SysPermissionController extends AbstractController {
 	 * 删除
 	 */
 	@SysLog("删除菜单")
-	@PostMapping("/delete/{menuId}")
+	@DeleteMapping("/delete")
 	//@PreAuthorize("hasAuthority('sys:menu:delete')")
-	public Result<Object> delete(@PathVariable("menuId") String menuId){
+	public Result<Object> delete(@RequestParam(name = "id") String id){
 
 		//判断是否有子菜单或按钮
-		List<SysPermissionEntity> menuList = sysPermissionService.queryListParentId(menuId);
+		List<SysPermissionEntity> menuList = sysPermissionService.queryListParentId(id);
 		if(menuList.size() > 0){
 			return Result.error("请先删除子菜单或按钮");
 		}
 
-		sysPermissionService.delete(menuId);
+		sysPermissionService.delete(id);
 
 		return Result.ok();
 	}

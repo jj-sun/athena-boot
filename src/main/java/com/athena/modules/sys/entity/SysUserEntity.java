@@ -58,6 +58,11 @@ public class SysUserEntity extends BasePo implements Serializable {
 	 */
 	private String mobile;
 
+	/**
+	 * 部门code
+	 */
+	private String deptCode;
+
 	private Integer userType;
 
 	/**

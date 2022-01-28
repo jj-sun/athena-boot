@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ public class SysPermissionEntity extends BasePo implements Serializable {
 	 * 父菜单ID，一级菜单为0
 	 */
 	private String parentId;
-	
+
 	/**
 	 * 父菜单名称
 	 */
@@ -68,14 +67,9 @@ public class SysPermissionEntity extends BasePo implements Serializable {
 	 * 排序
 	 */
 	private Integer orderNum;
-	
-	/**
-	 * ztree属性
-	 */
-	@TableField(exist=false)
-	private Boolean open;
+
 
 	@TableField(exist=false)
-	private List<SysPermissionEntity> list=new ArrayList<>();
+	private List<SysPermissionEntity> children;
 
 }

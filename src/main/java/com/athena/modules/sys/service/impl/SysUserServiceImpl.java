@@ -1,13 +1,11 @@
 package com.athena.modules.sys.service.impl;
 
 import com.athena.common.base.dto.PageDto;
-import com.athena.common.constant.Constant;
-import com.athena.common.exception.RRException;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
 import com.athena.modules.sys.entity.SysUserEntity;
+import com.athena.modules.sys.entity.SysUserRoleEntity;
 import com.athena.modules.sys.mapper.SysUserMapper;
-import com.athena.modules.sys.service.SysRoleService;
 import com.athena.modules.sys.service.SysUserRoleService;
 import com.athena.modules.sys.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -32,8 +30,6 @@ import java.util.List;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	@Autowired
-	private SysRoleService sysRoleService;
 
 	@Override
 	public PageUtils queryPage(SysUserEntity user, PageDto pageDto) {
@@ -70,9 +66,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 		}
 		this.save(user);
 		
-		//检查角色是否越权
-		checkRole(user);
-		
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getId(), user.getRoleIdList());
 	}
@@ -80,24 +73,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void update(SysUserEntity user) {
-		/*if(StringUtils.isBlank(user.getPassword())){
-			user.setPassword(null);
-		}else{
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-		}*/
+
 		this.updateById(user);
-		
-		//检查角色是否越权
-		checkRole(user);
 		
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getId(), user.getRoleIdList());
 	}
 
 	@Override
+	public boolean deleteEntity(String id) {
+		this.removeById(id);
+		sysUserRoleService.saveOrUpdate(id, null);
+		return false;
+	}
+
+	@Override
 	public void deleteBatch(List<String> ids) {
 		this.removeByIds(ids);
+		sysUserRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>().in(SysUserRoleEntity::getUserId, ids));
 	}
 
 	@Override
@@ -107,26 +100,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 		return this.update(userEntity,
 				new QueryWrapper<SysUserEntity>().eq("username", username));
 	}
-	
-	/**
-	 * 检查角色是否越权
-	 */
-	private void checkRole(SysUserEntity user){
-		if(user.getRoleIdList() == null || user.getRoleIdList().size() == 0){
-			return;
-		}
-		//如果不是超级管理员，则需要判断用户的角色是否自己创建
-		if(user.getCreator().equals(Constant.SUPER_ADMIN)){
-			return ;
-		}
-		
-		//查询用户创建的角色列表
-		List<String> roleIdList = sysRoleService.queryRoleIdList(user.getCreator());
 
-		//判断是否越权
-		if(!roleIdList.containsAll(user.getRoleIdList())){
-			throw new RRException("新增用户所选角色，不是本人创建");
-		}
-	}
 
 }

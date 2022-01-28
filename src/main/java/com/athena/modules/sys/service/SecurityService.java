@@ -9,7 +9,7 @@ import java.util.Set;
  *
  * @author sunjie
  */
-public interface ShiroService {
+public interface SecurityService {
     /**
      * 获取用户权限列表
      */

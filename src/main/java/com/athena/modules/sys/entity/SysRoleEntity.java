@@ -31,6 +31,11 @@ public class SysRoleEntity extends BasePo implements Serializable {
 	private String roleName;
 
 	/**
+	 * 角色编码
+	 */
+	private String roleCode;
+
+	/**
 	 * 备注
 	 */
 	private String remark;

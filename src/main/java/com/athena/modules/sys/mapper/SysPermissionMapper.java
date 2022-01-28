@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
+
 
 package com.athena.modules.sys.mapper;
 
@@ -27,11 +21,6 @@ public interface SysPermissionMapper extends BaseMapper<SysPermissionEntity> {
 	 * @param parentId 父菜单ID
 	 */
 	List<SysPermissionEntity> queryListParentId(String parentId);
-	
-	/**
-	 * 获取不包含按钮的菜单列表
-	 */
-	List<SysPermissionEntity> queryNotButtonList();
 
 	/**
 	 * 查询用户的所有菜单ID

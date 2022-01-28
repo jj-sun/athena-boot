@@ -3,6 +3,7 @@ package com.athena.modules.sys.vo;
 import com.athena.common.base.tree.BaseTree;
 import com.athena.modules.sys.entity.SysPermissionEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
@@ -11,6 +12,7 @@ import java.io.Serial;
  * @date 2021/12/20 16:16
  * @description
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SysMenuTree extends BaseTree<SysPermissionEntity> {
 

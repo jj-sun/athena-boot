@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
+
 
 package com.athena.modules.sys.service;
 
@@ -32,5 +26,5 @@ public interface SysUserRoleService extends IService<SysUserRoleEntity> {
 	/**
 	 * 根据角色ID数组，批量删除
 	 */
-	int deleteBatch(String[] roleIds);
+	int deleteBatch(List<String> roleIds);
 }

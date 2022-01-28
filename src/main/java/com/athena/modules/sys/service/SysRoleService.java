@@ -17,13 +17,10 @@ public interface SysRoleService extends IService<SysRoleEntity> {
 
 	PageUtils queryPage(SysRoleEntity role, PageDto pageDto);
 
-	void saveRole(SysRoleEntity role);
+	boolean deleteEntity(String id);
 
-	void update(SysRoleEntity role);
+	void deleteBatch(List<String> ids);
 
-	void deleteBatch(String[] roleIds);
-
-	
 	/**
 	 * 查询用户创建的角色ID列表
 	 */

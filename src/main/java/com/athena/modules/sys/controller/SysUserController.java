@@ -75,13 +75,13 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 用户信息
 	 */
-	@GetMapping("/info/{userId}")
+	@GetMapping("/info/{id}")
 	//@PreAuthorize("hasAuthority('sys:user:info')")
-	public Result<SysUserEntity> info(@PathVariable("userId") String userId){
-		SysUserEntity user = sysUserService.getById(userId);
+	public Result<SysUserEntity> info(@PathVariable("id") String id){
+		SysUserEntity user = sysUserService.getById(id);
 		
 		//获取用户所属的角色列表
-		List<String> roleIdList = sysUserRoleService.queryRoleIdList(userId);
+		List<String> roleIdList = sysUserRoleService.queryRoleIdList(id);
 		user.setRoleIdList(roleIdList);
 		
 		return Result.ok(user);
@@ -105,7 +105,7 @@ public class SysUserController extends AbstractController {
 	 * 修改用户
 	 */
 	@SysLog("修改用户")
-	@PostMapping("/update")
+	@PutMapping("/update")
 	//@PreAuthorize("hasAuthority('sys:user:update')")
 	public Result<Object> update(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
@@ -122,8 +122,7 @@ public class SysUserController extends AbstractController {
 	@DeleteMapping("/delete")
 	//@PreAuthorize("hasAuthority('sys:user:delete')")
 	public Result<Object> delete(@RequestParam(name = "id") String id){
-		
-		sysUserService.removeById(id);
+		sysUserService.deleteEntity(id);
 		return Result.ok();
 	}
 

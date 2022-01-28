@@ -5,15 +5,18 @@ import com.athena.modules.sys.entity.SysPermissionEntity;
 import com.athena.modules.sys.entity.SysUserEntity;
 import com.athena.modules.sys.mapper.SysPermissionMapper;
 import com.athena.modules.sys.mapper.SysUserMapper;
-import com.athena.modules.sys.service.ShiroService;
+import com.athena.modules.sys.service.SecurityService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * @author sunjie
+ */
 @Service
-public class ShiroServiceImpl implements ShiroService {
+public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
     @Autowired

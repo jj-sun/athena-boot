@@ -1,18 +1,10 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.athena.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.athena.common.utils.MapUtils;
-import com.athena.modules.sys.mapper.SysUserRoleMapper;
 import com.athena.modules.sys.entity.SysUserRoleEntity;
+import com.athena.modules.sys.mapper.SysUserRoleMapper;
 import com.athena.modules.sys.service.SysUserRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +22,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 	@Override
 	public void saveOrUpdate(String userId, List<String> roleIdList) {
 		//先删除用户与角色关系
-		this.removeByMap(new MapUtils().put("user_id", userId));
+		this.remove(new LambdaQueryWrapper<SysUserRoleEntity>().eq(SysUserRoleEntity::getUserId, userId));
 
 		if(roleIdList == null || roleIdList.size() == 0){
 			return ;
@@ -41,7 +33,6 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 			SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
 			sysUserRoleEntity.setUserId(userId);
 			sysUserRoleEntity.setRoleId(roleId);
-
 			this.save(sysUserRoleEntity);
 		}
 	}
@@ -52,7 +43,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 	}
 
 	@Override
-	public int deleteBatch(String[] roleIds){
+	public int deleteBatch(List<String> roleIds){
 		return baseMapper.deleteBatch(roleIds);
 	}
 }
