@@ -3,7 +3,7 @@ package com.athena.common.utils;
 /**
  * 系统参数相关Key
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public class ConfigConstant {
     /**

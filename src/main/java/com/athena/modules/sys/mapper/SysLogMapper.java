@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 系统日志
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface SysLogMapper extends BaseMapper<SysLogEntity> {

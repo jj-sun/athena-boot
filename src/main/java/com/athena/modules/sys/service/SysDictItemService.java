@@ -6,7 +6,7 @@ import com.athena.modules.sys.entity.SysDictItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2022/1/19 19:58
  * @description
  */

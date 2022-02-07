@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 用户与角色对应关系
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Service("sysUserRoleService")
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRoleEntity> implements SysUserRoleService {

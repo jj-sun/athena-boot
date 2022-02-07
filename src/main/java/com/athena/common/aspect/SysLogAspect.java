@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 /**
  * 系统日志，切面处理类
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Aspect
 @Component

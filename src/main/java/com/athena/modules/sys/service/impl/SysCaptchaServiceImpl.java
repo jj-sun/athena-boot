@@ -18,7 +18,7 @@ import java.util.Date;
 /**
  * 验证码
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Service("sysCaptchaService")
 public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaMapper, SysCaptchaEntity> implements SysCaptchaService {

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 系统用户
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {

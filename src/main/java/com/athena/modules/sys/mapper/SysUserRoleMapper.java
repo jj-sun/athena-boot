@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 用户与角色对应关系
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface SysUserRoleMapper extends BaseMapper<SysUserRoleEntity> {

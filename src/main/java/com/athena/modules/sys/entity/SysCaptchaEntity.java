@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * 系统验证码
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 @TableName("sys_captcha")

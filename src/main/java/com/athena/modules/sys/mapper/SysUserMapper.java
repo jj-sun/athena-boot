@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 系统用户
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {

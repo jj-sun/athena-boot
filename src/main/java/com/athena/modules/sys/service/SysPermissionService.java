@@ -3,8 +3,8 @@
 package com.athena.modules.sys.service;
 
 
-import com.athena.common.base.tree.BaseTree;
 import com.athena.modules.sys.entity.SysPermissionEntity;
+import com.athena.modules.sys.vo.SysMenuTree;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 菜单管理
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface SysPermissionService extends IService<SysPermissionEntity> {
 
@@ -35,12 +35,12 @@ public interface SysPermissionService extends IService<SysPermissionEntity> {
 	/**
 	 * 获取菜单
 	 */
-	List<BaseTree<SysPermissionEntity>> treeSelect();
+	List<SysMenuTree> treeSelect();
 	
 	/**
 	 * 获取用户菜单列表
 	 */
-	List<BaseTree<SysPermissionEntity>> getUserMenuTree(String username);
+	List<SysMenuTree> getUserMenuTree(String username);
 
 	/**
 	 * 删除

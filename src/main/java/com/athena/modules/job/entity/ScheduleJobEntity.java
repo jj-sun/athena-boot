@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * 定时任务
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 @TableName("schedule_job")

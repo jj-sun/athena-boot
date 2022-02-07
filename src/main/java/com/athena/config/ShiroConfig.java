@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Shiro配置
  *
- * @author sunjie
+ * @author Mr.sun
  *//*
 
 @Configuration

@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * shiro相关接口
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface SecurityService {
     /**

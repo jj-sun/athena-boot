@@ -4,7 +4,7 @@ import com.athena.modules.sys.entity.SysDictItem;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2022/1/19 19:57
  * @description
  */

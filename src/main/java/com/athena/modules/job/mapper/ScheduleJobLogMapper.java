@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 定时任务日志
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface ScheduleJobLogMapper extends BaseMapper<ScheduleJobLogEntity> {

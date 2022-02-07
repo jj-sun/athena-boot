@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 角色
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

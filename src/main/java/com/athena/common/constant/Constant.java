@@ -3,7 +3,7 @@ package com.athena.common.constant;
 /**
  * 常量
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public class Constant {
 	/** 超级管理员ID */

@@ -1,7 +1,6 @@
 package com.athena.modules.sys.service.impl;
 
 
-import com.athena.common.base.tree.BaseTree;
 import com.athena.common.constant.Constant;
 import com.athena.common.utils.TreeUtils;
 import com.athena.modules.sys.entity.SysPermissionEntity;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @author sunjie
+ * @author Mr.sun
  */
 @Service("sysMenuService")
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermissionEntity> implements SysPermissionService {
@@ -76,13 +75,13 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 
 	@Override
-	public List<BaseTree<SysPermissionEntity>> treeSelect() {
+	public List<SysMenuTree> treeSelect() {
 		List<SysPermissionEntity> sysPermissionEntities = this.list();
 		return this.getTree(sysPermissionEntities);
 	}
 
 	@Override
-	public List<BaseTree<SysPermissionEntity>> getUserMenuTree(String username) {
+	public List<SysMenuTree> getUserMenuTree(String username) {
 		List<SysPermissionEntity> sysPermissionEntities;
 		//系统管理员，拥有最高权限
 		if(username.equals(Constant.SUPER_ADMIN)){
@@ -95,11 +94,11 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 		return this.getTree(sysPermissionEntities);
 	}
 
-	private List<BaseTree<SysPermissionEntity>> getTree(List<SysPermissionEntity> sysPermissionEntities) {
-		List<BaseTree<SysPermissionEntity>> menuTreeList = Lists.newArrayList();
+	private List<SysMenuTree> getTree(List<SysPermissionEntity> sysPermissionEntities) {
+		List<SysMenuTree> menuTreeList = Lists.newArrayList();
 		if(!CollectionUtils.isEmpty(sysPermissionEntities)) {
 			sysPermissionEntities.forEach(sysPermissionEntity -> menuTreeList.add(new SysMenuTree(sysPermissionEntity)));
-			List<BaseTree<SysPermissionEntity>> root = menuTreeList.stream().filter(sysMenuTree -> sysMenuTree.getParentKey().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
+			List<SysMenuTree> root = menuTreeList.stream().filter(sysMenuTree -> sysMenuTree.getParentKey().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
 			if(!CollectionUtils.isEmpty(root)) {
 				TreeUtils.buildTree(root, menuTreeList);
 				return root;

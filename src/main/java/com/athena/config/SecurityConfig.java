@@ -32,7 +32,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2021/12/14 11:29
  * @description
  */
@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     //生成token，然后存到redis
                     LoginUser loginUser = (LoginUser) authentication.getPrincipal();
                     String token = JwtUtils.generateToken(loginUser.getUsername(), loginUser.getPassword());
+                    //默认一个小时
                     redisUtils.set(RedisConstant.PREFIX_USER_TOKEN + token, token, JwtUtils.EXPIRE*2 / 1000);
                     Map<String, Object> result = Maps.newHashMap();
                     result.put("token", token);
@@ -86,6 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/druid/**").permitAll()
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
                     //未经验证时
@@ -115,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     out.write(JSON.toJSONString(Result.error(HttpStatus.OK.value(), "logout success")));
                     out.flush();
                     out.close();
-                }).permitAll();
+                }).permitAll().and().headers().frameOptions().disable();
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

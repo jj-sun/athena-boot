@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * Controller公共组件
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public abstract class AbstractController {
 	protected Logger logger = LoggerFactory.getLogger(getClass());

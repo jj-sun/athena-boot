@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 角色
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {

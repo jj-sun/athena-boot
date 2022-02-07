@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * 系统日志
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Controller
 @RequestMapping("/sys/log")

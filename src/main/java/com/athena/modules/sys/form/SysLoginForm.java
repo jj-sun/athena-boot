@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 登录表单
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 public class SysLoginForm {

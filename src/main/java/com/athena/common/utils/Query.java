@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * 查询参数
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public class Query<T> {
 

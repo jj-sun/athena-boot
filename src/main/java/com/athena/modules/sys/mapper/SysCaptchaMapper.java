@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 验证码
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface SysCaptchaMapper extends BaseMapper<SysCaptchaEntity> {

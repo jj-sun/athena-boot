@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2022/1/19 17:36
  * @description 字典注解
  */

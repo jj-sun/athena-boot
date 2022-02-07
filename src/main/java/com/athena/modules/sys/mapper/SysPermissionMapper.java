@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 菜单管理
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface SysPermissionMapper extends BaseMapper<SysPermissionEntity> {

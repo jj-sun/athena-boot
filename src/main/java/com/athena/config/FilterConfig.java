@@ -11,7 +11,7 @@ import javax.servlet.DispatcherType;
 /**
  * Filter配置
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Configuration
 public class FilterConfig {

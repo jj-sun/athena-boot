@@ -1,13 +1,13 @@
 package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.SysLog;
-import com.athena.common.base.tree.BaseTree;
 import com.athena.common.constant.Constant;
 import com.athena.common.exception.RRException;
 import com.athena.common.utils.Result;
 import com.athena.modules.sys.entity.SysPermissionEntity;
 import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysPermissionService;
+import com.athena.modules.sys.vo.SysMenuTree;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * 系统菜单
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @RestController
 @RequestMapping("/sys/permission")
@@ -35,7 +35,7 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/nav")
 	public Result<Map<String, Object>> nav(){
-		List<BaseTree<SysPermissionEntity>> menuTree = sysPermissionService.getUserMenuTree(getUsername());
+		List<SysMenuTree> menuTree = sysPermissionService.getUserMenuTree(getUsername());
 		Set<String> permissions = securityService.getUserPermissions(getUsername());
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("menuTree", menuTree);
@@ -58,9 +58,9 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/select")
 	//@PreAuthorize("hasAuthority('sys:menu:select')")
-	public Result<List<BaseTree<SysPermissionEntity>>> select(){
+	public Result<List<SysMenuTree>> select(){
 		//查询列表数据
-		List<BaseTree<SysPermissionEntity>> menuList = sysPermissionService.treeSelect();
+		List<SysMenuTree> menuList = sysPermissionService.treeSelect();
 		
 		return Result.ok(menuList);
 	}
@@ -132,8 +132,8 @@ public class SysPermissionController extends AbstractController {
 			throw new RRException("菜单名称不能为空");
 		}
 		
-		if(menu.getParentId() == null){
-			throw new RRException("上级菜单不能为空");
+		if(org.apache.commons.lang3.StringUtils.isBlank(menu.getParentId())){
+			menu.setParentId(Constant.TREE_ROOT);
 		}
 		
 		//菜单

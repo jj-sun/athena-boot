@@ -5,7 +5,7 @@ package com.athena.common.validator.group;
 /**
  * 腾讯云
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface QcloudGroup {
 }

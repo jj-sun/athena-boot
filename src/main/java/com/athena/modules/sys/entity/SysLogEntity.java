@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * 系统日志
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 @TableName("sys_log")

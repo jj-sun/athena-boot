@@ -5,7 +5,7 @@ import java.io.Serial;
 /**
  * 自定义异常
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public class RRException extends RuntimeException {
 

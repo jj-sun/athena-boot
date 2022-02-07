@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 密码表单
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 public class PasswordForm {

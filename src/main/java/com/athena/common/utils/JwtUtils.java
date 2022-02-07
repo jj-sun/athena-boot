@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * jwt工具类
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public class JwtUtils {
     private final Logger logger = LoggerFactory.getLogger(getClass());

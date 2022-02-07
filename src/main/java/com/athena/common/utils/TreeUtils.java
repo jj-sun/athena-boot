@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2021/12/20 15:56
  * @description 构建树结构
  */
 public class TreeUtils {
 
-    public static<T> List<BaseTree<T>> buildTree(List<BaseTree<T>> all) {
+    public static<T> List<? extends BaseTree<T>> buildTree(List<? extends BaseTree<T>> all) {
         if(CollectionUtils.isEmpty(all)) {
             return null;
         }
@@ -25,14 +25,14 @@ public class TreeUtils {
         return root;
     }
 
-    public static<T> void buildTree(List<BaseTree<T>> roots, List<BaseTree<T>> all) {
+    public static<T> void buildTree(List<? extends BaseTree<T>> roots, List<? extends BaseTree<T>> all) {
         if(CollectionUtils.isEmpty(roots)) {
             return;
         }
         findChildren(roots, all);
     }
 
-    private static<T> void findChildren(List<BaseTree<T>> roots, List<BaseTree<T>> all) {
+    private static<T> void findChildren(List<? extends BaseTree<T>> roots, List<? extends BaseTree<T>> all) {
         if(CollectionUtils.isEmpty(roots)) {
             return;
         }

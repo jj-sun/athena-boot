@@ -1,7 +1,7 @@
 package com.athena.common.constant;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2021/12/16 11:46
  * @description
  */

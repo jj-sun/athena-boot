@@ -3,7 +3,7 @@ package com.athena;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * @author sunjie
+ * @author Mr.sun
  * @date 2021/12/14 18:42
  * @description
  */

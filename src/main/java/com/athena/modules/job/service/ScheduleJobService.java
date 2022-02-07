@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
  * 定时任务
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface ScheduleJobService extends IService<ScheduleJobEntity> {
 

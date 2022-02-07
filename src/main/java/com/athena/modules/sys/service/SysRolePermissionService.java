@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 角色与菜单对应关系
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface SysRolePermissionService extends IService<SysRolePermissionEntity> {
 	

@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 角色与菜单对应关系
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 @TableName("sys_role_permission")

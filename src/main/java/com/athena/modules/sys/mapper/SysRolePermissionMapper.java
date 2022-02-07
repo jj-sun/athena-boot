@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 角色与菜单对应关系
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface SysRolePermissionMapper extends BaseMapper<SysRolePermissionEntity> {

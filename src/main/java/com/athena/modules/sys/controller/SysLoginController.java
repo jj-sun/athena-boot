@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * 登录相关
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @RestController
 public class SysLoginController extends AbstractController {

@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 定时任务
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Mapper
 public interface ScheduleJobMapper extends BaseMapper<ScheduleJobEntity> {

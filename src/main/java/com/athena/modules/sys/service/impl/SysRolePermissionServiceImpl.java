@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 角色与菜单对应关系
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Service("sysRoleMenuService")
 public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionMapper, SysRolePermissionEntity> implements SysRolePermissionService {

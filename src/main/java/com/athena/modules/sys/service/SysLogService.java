@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
  * 系统日志
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface SysLogService extends IService<SysLogEntity> {
 

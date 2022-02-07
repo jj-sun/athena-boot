@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 角色
  *
- * @author sunjie
+ * @author Mr.sun
  */
 public interface SysRoleService extends IService<SysRoleEntity> {
 

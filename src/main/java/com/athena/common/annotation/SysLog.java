@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 系统日志注解
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

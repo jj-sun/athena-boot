@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 返回数据
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Data
 public class Result<T> implements Serializable {

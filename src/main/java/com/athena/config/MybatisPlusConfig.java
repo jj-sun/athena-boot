@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * mybatis-plus配置
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Configuration
 @MapperScan(value={"com.athena.modules.**.mapper*"})

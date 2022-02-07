@@ -13,7 +13,7 @@ import java.util.Properties;
 /**
  * 生成验证码配置
  *
- * @author sunjie
+ * @author Mr.sun
  */
 @Configuration
 public class KaptchaConfig {

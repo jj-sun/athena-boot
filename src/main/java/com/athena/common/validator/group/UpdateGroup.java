@@ -5,7 +5,7 @@ package com.athena.common.validator.group;
 /**
  * 更新数据 Group
  *
- * @author sunjie
+ * @author Mr.sun
  */
 
 public interface UpdateGroup {
