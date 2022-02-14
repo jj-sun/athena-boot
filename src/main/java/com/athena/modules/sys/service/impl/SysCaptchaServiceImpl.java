@@ -20,7 +20,7 @@ import java.util.Date;
  *
  * @author Mr.sun
  */
-@Service("sysCaptchaService")
+@Service
 public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaMapper, SysCaptchaEntity> implements SysCaptchaService {
     @Autowired
     private Producer producer;

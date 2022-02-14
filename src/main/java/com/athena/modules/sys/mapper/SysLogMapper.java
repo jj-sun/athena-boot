@@ -4,7 +4,7 @@ package com.athena.modules.sys.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.athena.modules.sys.entity.SysLogEntity;
+import com.athena.modules.sys.entity.SysLog;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author Mr.sun
  */
 @Mapper
-public interface SysLogMapper extends BaseMapper<SysLogEntity> {
+public interface SysLogMapper extends BaseMapper<SysLog> {
 	
 }

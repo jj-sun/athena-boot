@@ -4,7 +4,7 @@ import com.athena.common.constant.RedisConstant;
 import com.athena.common.constant.SecurityConstant;
 import com.athena.common.utils.JwtUtils;
 import com.athena.common.utils.RedisUtils;
-import com.athena.modules.sys.entity.SysUserEntity;
+import com.athena.modules.sys.entity.SysUser;
 import com.athena.modules.sys.form.LoginUser;
 import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysUserService;
@@ -60,22 +60,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            SysUserEntity sysUserEntity = sysUserService.queryByUserName(username);
-            if(Objects.isNull(sysUserEntity)) {
+            SysUser sysUser = sysUserService.queryByUserName(username);
+            if(Objects.isNull(sysUser)) {
                 //用户信息为空，认证失败
                 log.warn("用户信息为空，认证失败");
                 filterChain.doFilter(request, response);
                 return;
             }
-            if(!jwtTokenRefresh(accessToken, username, sysUserEntity.getPassword())) {
+            if(!jwtTokenRefresh(accessToken, username, sysUser.getPassword())) {
                 //token失效，认证失败
                 log.warn("token失效，认证失败");
                 filterChain.doFilter(request, response);
                 return;
             }
-            Set<String> perms = securityService.getUserPermissions(sysUserEntity.getUsername());
+            Set<String> perms = securityService.getUserPermissions(sysUser.getUsername());
             LoginUser loginUser = new LoginUser();
-            loginUser.setUser(sysUserEntity);
+            loginUser.setUser(sysUser);
             loginUser.setPermissions(new HashSet<>(perms));
             List<SimpleGrantedAuthority> grantedAuthorities = Lists.newArrayList();
             if(!CollectionUtils.isEmpty(perms)) {

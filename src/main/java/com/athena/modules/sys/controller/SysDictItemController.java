@@ -1,6 +1,6 @@
 package com.athena.modules.sys.controller;
 
-import com.athena.common.annotation.SysLog;
+import com.athena.common.annotation.Log;
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
@@ -47,7 +47,7 @@ public class SysDictItemController {
     /**
      * 保存字典
      */
-    @SysLog("保存字典")
+    @Log("保存字典")
     @PostMapping("/save")
     //@PreAuthorize("hasAuthority('sys:user:save')")
     public Result<Object> save(@RequestBody SysDictItem dictItem){
@@ -61,7 +61,7 @@ public class SysDictItemController {
     /**
      * 修改字典
      */
-    @SysLog("修改字典")
+    @Log("修改字典")
     @PutMapping("/update")
     //@PreAuthorize("hasAuthority('sys:user:update')")
     public Result<Object> update(@RequestBody SysDictItem dictItem){
@@ -74,7 +74,7 @@ public class SysDictItemController {
     /**
      * 删除字典
      */
-    @SysLog("删除字典")
+    @Log("删除字典")
     @DeleteMapping("/delete")
     //@PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<Object> delete(@RequestParam(name = "id") String id){

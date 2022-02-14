@@ -1,6 +1,6 @@
 package com.athena.permission;
 
-import com.athena.modules.sys.entity.SysPermissionEntity;
+import com.athena.modules.sys.entity.SysPermission;
 import com.athena.modules.sys.service.SysPermissionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,44 +25,44 @@ public class PermissionTest {
 
     @Test
     public void inertRoot() {
-        SysPermissionEntity sysPermissionEntity = new SysPermissionEntity();
-        sysPermissionEntity.setParentId("0");
-        sysPermissionEntity.setName("首页");
-        sysPermissionEntity.setUrl("dashboard/analysis");
-        sysPermissionEntity.setComponent("/dashboard/index");
-        sysPermissionEntity.setType(0);
+        SysPermission sysPermission = new SysPermission();
+        sysPermission.setParentId("0");
+        sysPermission.setName("首页");
+        sysPermission.setUrl("dashboard/analysis");
+        sysPermission.setComponent("/dashboard/index");
+        sysPermission.setType(0);
 
-        permissionService.save(sysPermissionEntity);
+        permissionService.save(sysPermission);
     }
 
     @Test
     public void insertSystem(){
-        SysPermissionEntity sysPermissionEntity = new SysPermissionEntity();
-        sysPermissionEntity.setParentId("0");
-        sysPermissionEntity.setName("系统管理");
-        sysPermissionEntity.setUrl("/system");
-        sysPermissionEntity.setComponent("layout/index");
-        sysPermissionEntity.setType(1);
-        permissionService.save(sysPermissionEntity);
+        SysPermission sysPermission = new SysPermission();
+        sysPermission.setParentId("0");
+        sysPermission.setName("系统管理");
+        sysPermission.setUrl("/system");
+        sysPermission.setComponent("layout/index");
+        sysPermission.setType(1);
+        permissionService.save(sysPermission);
     }
 
-    public List<SysPermissionEntity> buildSystemMenu() {
-        List<SysPermissionEntity> list = new ArrayList<>();
-        SysPermissionEntity user = new SysPermissionEntity();
+    public List<SysPermission> buildSystemMenu() {
+        List<SysPermission> list = new ArrayList<>();
+        SysPermission user = new SysPermission();
         user.setParentId("1475702165283561473");
         user.setName("用户管理");
         user.setUrl("/system/user");
         user.setComponent("system/userList");
         user.setType(0);
 
-        SysPermissionEntity role = new SysPermissionEntity();
+        SysPermission role = new SysPermission();
         role.setParentId("1475702165283561473");
         role.setName("角色管理");
         role.setUrl("/system/role");
         role.setComponent("system/roleList");
         role.setType(1);
 
-        SysPermissionEntity menu = new SysPermissionEntity();
+        SysPermission menu = new SysPermission();
         menu.setParentId("1475702165283561473");
         menu.setName("菜单管理");
         menu.setUrl("/system/permission");
@@ -77,7 +77,7 @@ public class PermissionTest {
 
     @Test
     public void insertSystemChildren() {
-        List<SysPermissionEntity> list = buildSystemMenu();
+        List<SysPermission> list = buildSystemMenu();
         permissionService.saveBatch(list);
     }
 

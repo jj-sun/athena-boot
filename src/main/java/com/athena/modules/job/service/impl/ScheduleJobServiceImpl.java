@@ -4,13 +4,14 @@ import com.athena.common.base.dto.PageDto;
 import com.athena.common.constant.Constant;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
-import com.athena.modules.job.entity.ScheduleJobEntity;
+import com.athena.modules.job.entity.ScheduleJob;
 import com.athena.modules.job.mapper.ScheduleJobMapper;
 import com.athena.modules.job.service.ScheduleJobService;
 import com.athena.modules.job.utils.ScheduleUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@Service("scheduleJobService")
-public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, ScheduleJobEntity> implements ScheduleJobService {
+/**
+ * @author Mr.sun
+ */
+@Service
+public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, ScheduleJob> implements ScheduleJobService {
 	@Autowired
     private Scheduler scheduler;
 	
@@ -30,8 +37,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 	 */
 	@PostConstruct
 	public void init(){
-		List<ScheduleJobEntity> scheduleJobList = this.list();
-		for(ScheduleJobEntity scheduleJob : scheduleJobList){
+		List<ScheduleJob> scheduleJobList = this.list();
+		for(ScheduleJob scheduleJob : scheduleJobList){
 			CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, scheduleJob.getId());
             //如果不存在，则创建
             if(cronTrigger == null) {
@@ -43,11 +50,11 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 	}
 
 	@Override
-	public PageUtils queryPage(ScheduleJobEntity scheduleJob, PageDto pageDto) {
+	public PageUtils queryPage(ScheduleJob scheduleJob, PageDto pageDto) {
 
-		IPage<ScheduleJobEntity> page = this.page(
-			new Query<ScheduleJobEntity>().getPage(pageDto),
-			new QueryWrapper <ScheduleJobEntity>()
+		IPage<ScheduleJob> page = this.page(
+			new Query<ScheduleJob>().getPage(pageDto),
+			new LambdaQueryWrapper<ScheduleJob>().like(StringUtils.isNotBlank(scheduleJob.getBeanName()), ScheduleJob::getBeanName, scheduleJob.getBeanName())
 		);
 
 		return new PageUtils(page);
@@ -56,8 +63,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void saveJob(ScheduleJobEntity scheduleJob) {
-		scheduleJob.setCreateTime(new Date());
+	public void saveJob(ScheduleJob scheduleJob) {
+		scheduleJob.setCtime(new Date());
 		scheduleJob.setStatus(Constant.ScheduleStatus.NORMAL.getValue());
         this.save(scheduleJob);
         
@@ -66,7 +73,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void update(ScheduleJobEntity scheduleJob) {
+	public void update(ScheduleJob scheduleJob) {
         ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
                 
         this.updateById(scheduleJob);
@@ -74,17 +81,17 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-    public void deleteBatch(String[] jobIds) {
+    public void deleteBatch(List<String> jobIds) {
     	for(String jobId : jobIds){
     		ScheduleUtils.deleteScheduleJob(scheduler, jobId);
     	}
     	
     	//删除数据
-    	this.removeByIds(Arrays.asList(jobIds));
+    	this.removeByIds(jobIds);
 	}
 
 	@Override
-    public int updateBatch(String[] jobIds, int status){
+    public int updateBatch(List<String> jobIds, int status){
     	Map<String, Object> map = new HashMap<>(2);
     	map.put("list", jobIds);
     	map.put("status", status);
@@ -93,7 +100,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
     
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-    public void run(String[] jobIds) {
+    public void run(List<String> jobIds) {
     	for(String jobId : jobIds){
     		ScheduleUtils.run(scheduler, this.getById(jobId));
     	}
@@ -101,7 +108,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-    public void pause(String[] jobIds) {
+    public void pause(List<String> jobIds) {
         for(String jobId : jobIds){
     		ScheduleUtils.pauseJob(scheduler, jobId);
     	}
@@ -111,7 +118,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-    public void resume(String[] jobIds) {
+    public void resume(List<String> jobIds) {
     	for(String jobId : jobIds){
     		ScheduleUtils.resumeJob(scheduler, jobId);
     	}

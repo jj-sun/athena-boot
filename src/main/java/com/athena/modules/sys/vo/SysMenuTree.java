@@ -1,7 +1,8 @@
 package com.athena.modules.sys.vo;
 
 import com.athena.common.base.tree.BaseTree;
-import com.athena.modules.sys.entity.SysPermissionEntity;
+import com.athena.common.constant.Constant;
+import com.athena.modules.sys.entity.SysPermission;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,21 +15,22 @@ import java.io.Serial;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SysMenuTree extends BaseTree<SysPermissionEntity> {
+public class SysMenuTree extends BaseTree<SysPermission> {
 
     @Serial
     private static final long serialVersionUID = -2798455242241355324L;
 
-    public SysMenuTree(SysPermissionEntity sysPermissionEntity) {
-        super.setInfo(sysPermissionEntity);
+    public SysMenuTree(SysPermission sysPermission) {
+        super.setInfo(sysPermission);
         this.toTree();
     }
 
     @Override
     public void toTree() {
-        SysPermissionEntity sysPermissionEntity = super.getInfo();
-        super.setKey(sysPermissionEntity.getId());
-        super.setParentKey(sysPermissionEntity.getParentId());
-        super.setLabel(sysPermissionEntity.getName());
+        SysPermission sysPermission = super.getInfo();
+        super.setKey(sysPermission.getId());
+        super.setParentKey(sysPermission.getParentId());
+        super.setLabel(sysPermission.getName());
+        super.setDisabled(sysPermission.getName().equals(Constant.BASE_MENU_NAME));
     }
 }

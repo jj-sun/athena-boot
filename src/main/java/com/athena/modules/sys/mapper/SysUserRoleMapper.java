@@ -3,7 +3,7 @@
 package com.athena.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.athena.modules.sys.entity.SysUserRoleEntity;
+import com.athena.modules.sys.entity.SysUserRole;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author Mr.sun
  */
 @Mapper
-public interface SysUserRoleMapper extends BaseMapper<SysUserRoleEntity> {
+public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 	
 	/**
 	 * 根据用户ID，获取角色ID列表

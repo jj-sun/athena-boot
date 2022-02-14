@@ -1,7 +1,7 @@
 package com.athena.modules.job.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.athena.modules.job.entity.ScheduleJobEntity;
+import com.athena.modules.job.entity.ScheduleJob;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Mr.sun
  */
 @Mapper
-public interface ScheduleJobMapper extends BaseMapper<ScheduleJobEntity> {
+public interface ScheduleJobMapper extends BaseMapper<ScheduleJob> {
 	
 	/**
 	 * 批量更新状态

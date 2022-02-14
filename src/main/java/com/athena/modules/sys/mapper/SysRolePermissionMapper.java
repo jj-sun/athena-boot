@@ -1,7 +1,7 @@
 package com.athena.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.athena.modules.sys.entity.SysRolePermissionEntity;
+import com.athena.modules.sys.entity.SysRolePermission;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author Mr.sun
  */
 @Mapper
-public interface SysRolePermissionMapper extends BaseMapper<SysRolePermissionEntity> {
+public interface SysRolePermissionMapper extends BaseMapper<SysRolePermission> {
 	
 	/**
 	 * 根据角色ID，获取菜单ID列表

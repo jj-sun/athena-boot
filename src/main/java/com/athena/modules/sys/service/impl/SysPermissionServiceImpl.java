@@ -2,9 +2,10 @@ package com.athena.modules.sys.service.impl;
 
 
 import com.athena.common.constant.Constant;
+import com.athena.common.utils.SecurityUtil;
 import com.athena.common.utils.TreeUtils;
-import com.athena.modules.sys.entity.SysPermissionEntity;
-import com.athena.modules.sys.entity.SysRolePermissionEntity;
+import com.athena.modules.sys.entity.SysPermission;
+import com.athena.modules.sys.entity.SysRolePermission;
 import com.athena.modules.sys.mapper.SysPermissionMapper;
 import com.athena.modules.sys.service.SysPermissionService;
 import com.athena.modules.sys.service.SysRolePermissionService;
@@ -24,28 +25,28 @@ import java.util.stream.Collectors;
 /**
  * @author Mr.sun
  */
-@Service("sysMenuService")
-public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermissionEntity> implements SysPermissionService {
+@Service
+public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
 
 	@Autowired
 	private SysRolePermissionService sysRolePermissionService;
 
 	@Override
-	public List<SysPermissionEntity> permissionTree() {
-		List<SysPermissionEntity> sysPermissionEntities = this.list();
+	public List<SysPermission> permissionTree() {
+		List<SysPermission> sysPermissionEntities = this.list();
 		if(!CollectionUtils.isEmpty(sysPermissionEntities)) {
-			List<SysPermissionEntity> roots = sysPermissionEntities.stream().filter(root -> root.getParentId().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
+			List<SysPermission> roots = sysPermissionEntities.stream().filter(root -> root.getParentId().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
 			buildTree(roots, sysPermissionEntities);
 			return roots;
 		}
 		return sysPermissionEntities;
 	}
-	private void buildTree(List<SysPermissionEntity> roots, List<SysPermissionEntity> all) {
+	private void buildTree(List<SysPermission> roots, List<SysPermission> all) {
 		if(CollectionUtils.isEmpty(roots)) {
 			return;
 		}
 		roots.forEach(root -> {
-			List<SysPermissionEntity> childrenList = all.stream().filter(tree -> tree.getParentId().equals(root.getId())).collect(Collectors.toList());
+			List<SysPermission> childrenList = all.stream().filter(tree -> tree.getParentId().equals(root.getId())).collect(Collectors.toList());
 			if(!CollectionUtils.isEmpty(childrenList)) {
 				root.setChildren(childrenList);
 				buildTree(childrenList, all);
@@ -54,14 +55,14 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 
 	@Override
-	public List<SysPermissionEntity> queryListParentId(String parentId, List<String> menuIdList) {
-		List<SysPermissionEntity> menuList = queryListParentId(parentId);
+	public List<SysPermission> queryListParentId(String parentId, List<String> menuIdList) {
+		List<SysPermission> menuList = queryListParentId(parentId);
 		if(menuIdList == null){
 			return menuList;
 		}
 		
-		List<SysPermissionEntity> userMenuList = new ArrayList<>();
-		for(SysPermissionEntity menu : menuList){
+		List<SysPermission> userMenuList = new ArrayList<>();
+		for(SysPermission menu : menuList){
 			if(menuIdList.contains(menu.getId())){
 				userMenuList.add(menu);
 			}
@@ -70,31 +71,32 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	}
 
 	@Override
-	public List<SysPermissionEntity> queryListParentId(String parentId) {
-		return baseMapper.queryListParentId(parentId);
+	public List<SysPermission> queryListParentId(String parentId) {
+		return this.list(new LambdaQueryWrapper<SysPermission>().eq(SysPermission::getParentId, parentId).orderByAsc(SysPermission::getOrderNum));
 	}
 
 	@Override
 	public List<SysMenuTree> treeSelect() {
-		List<SysPermissionEntity> sysPermissionEntities = this.list();
+		List<SysPermission> sysPermissionEntities = this.list();
 		return this.getTree(sysPermissionEntities);
 	}
 
 	@Override
-	public List<SysMenuTree> getUserMenuTree(String username) {
-		List<SysPermissionEntity> sysPermissionEntities;
+	public List<SysMenuTree> getUserPermissionTree(String username) {
+		List<SysPermission> sysPermissionEntities;
+
 		//系统管理员，拥有最高权限
 		if(username.equals(Constant.SUPER_ADMIN)){
-			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON.getValue()));
+			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermission>().ne(SysPermission::getType, Constant.PermissionType.BUTTON.getValue()));
 		} else {
 			//用户菜单列表
-			List<String> menuIdList = this.getBaseMapper().queryAllMenuId(username);
-			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermissionEntity>().in(SysPermissionEntity::getId, menuIdList).ne(SysPermissionEntity::getType, Constant.PermissionType.BUTTON.getValue()));
+			List<String> menuIdList = this.getBaseMapper().queryAllMenuId(SecurityUtil.getLoginUser().getId());
+			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermission>().in(SysPermission::getId, menuIdList).ne(SysPermission::getType, Constant.PermissionType.BUTTON.getValue()));
 		}
 		return this.getTree(sysPermissionEntities);
 	}
 
-	private List<SysMenuTree> getTree(List<SysPermissionEntity> sysPermissionEntities) {
+	private List<SysMenuTree> getTree(List<SysPermission> sysPermissionEntities) {
 		List<SysMenuTree> menuTreeList = Lists.newArrayList();
 		if(!CollectionUtils.isEmpty(sysPermissionEntities)) {
 			sysPermissionEntities.forEach(sysPermissionEntity -> menuTreeList.add(new SysMenuTree(sysPermissionEntity)));
@@ -112,7 +114,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 		//删除菜单
 		this.removeById(permissionId);
 		//删除菜单与角色关联
-		sysRolePermissionService.remove(new LambdaQueryWrapper<SysRolePermissionEntity>().eq(SysRolePermissionEntity::getPermissionId, permissionId));
+		sysRolePermissionService.remove(new LambdaQueryWrapper<SysRolePermission>().eq(SysRolePermission::getPermissionId, permissionId));
 	}
 
 }

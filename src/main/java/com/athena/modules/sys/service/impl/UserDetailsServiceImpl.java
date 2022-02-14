@@ -1,6 +1,6 @@
 package com.athena.modules.sys.service.impl;
 
-import com.athena.modules.sys.entity.SysUserEntity;
+import com.athena.modules.sys.entity.SysUser;
 import com.athena.modules.sys.form.LoginUser;
 import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysUserService;
@@ -34,12 +34,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUserEntity sysUserEntity = sysUserService.queryByUserName(username);
-        if(Objects.isNull(sysUserEntity)) {
+        SysUser sysUser = sysUserService.queryByUserName(username);
+        if(Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("找不到用户信息！");
         }
         LoginUser userDetail = new LoginUser();
-        userDetail.setUser(sysUserEntity);
+        userDetail.setUser(sysUser);
         Set<String> permsSet = securityService.getUserPermissions(username);
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
         if(!CollectionUtils.isEmpty(permsSet)) {

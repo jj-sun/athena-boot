@@ -9,7 +9,7 @@
 
 	<delete id="deleteBatch">
 		delete from sys_role_permission where role_id in
-		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+		<foreach item="roleId" collection="list" open="(" separator="," close=")">
 			#{roleId}
 		</foreach>
 	</delete>

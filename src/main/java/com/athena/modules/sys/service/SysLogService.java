@@ -3,7 +3,7 @@ package com.athena.modules.sys.service;
 
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
-import com.athena.modules.sys.entity.SysLogEntity;
+import com.athena.modules.sys.entity.SysLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
@@ -12,8 +12,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *
  * @author Mr.sun
  */
-public interface SysLogService extends IService<SysLogEntity> {
+public interface SysLogService extends IService<SysLog> {
 
-    PageUtils queryPage(SysLogEntity sysLog, PageDto pageDto);
+    PageUtils queryPage(SysLog sysLog, PageDto pageDto);
 
 }

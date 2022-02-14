@@ -2,7 +2,7 @@ package com.athena.modules.job.utils;
 
 import com.athena.common.constant.Constant;
 import com.athena.common.exception.RRException;
-import com.athena.modules.job.entity.ScheduleJobEntity;
+import com.athena.modules.job.entity.ScheduleJob;
 import org.quartz.*;
 
 /**
@@ -41,10 +41,10 @@ public class ScheduleUtils {
     /**
      * 创建定时任务
      */
-    public static void createScheduleJob(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
+    public static void createScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
         try {
         	//构建job信息
-            JobDetail jobDetail = JobBuilder.newJob(ScheduleJob.class).withIdentity(getJobKey(scheduleJob.getId())).build();
+            JobDetail jobDetail = JobBuilder.newJob(com.athena.modules.job.utils.ScheduleJob.class).withIdentity(getJobKey(scheduleJob.getId())).build();
 
             //表达式调度构建器
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCronExpression())
@@ -54,7 +54,7 @@ public class ScheduleUtils {
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(getTriggerKey(scheduleJob.getId())).withSchedule(scheduleBuilder).build();
 
             //放入参数，运行时的方法可以获取
-            jobDetail.getJobDataMap().put(ScheduleJobEntity.JOB_PARAM_KEY, scheduleJob);
+            jobDetail.getJobDataMap().put(ScheduleJob.JOB_PARAM_KEY, scheduleJob);
 
             scheduler.scheduleJob(jobDetail, trigger);
             
@@ -70,7 +70,7 @@ public class ScheduleUtils {
     /**
      * 更新定时任务
      */
-    public static void updateScheduleJob(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
+    public static void updateScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
         try {
             TriggerKey triggerKey = getTriggerKey(scheduleJob.getId());
 
@@ -84,7 +84,7 @@ public class ScheduleUtils {
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
             
             //参数
-            trigger.getJobDataMap().put(ScheduleJobEntity.JOB_PARAM_KEY, scheduleJob);
+            trigger.getJobDataMap().put(ScheduleJob.JOB_PARAM_KEY, scheduleJob);
             
             scheduler.rescheduleJob(triggerKey, trigger);
             
@@ -101,11 +101,11 @@ public class ScheduleUtils {
     /**
      * 立即执行任务
      */
-    public static void run(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
+    public static void run(Scheduler scheduler, ScheduleJob scheduleJob) {
         try {
         	//参数
         	JobDataMap dataMap = new JobDataMap();
-        	dataMap.put(ScheduleJobEntity.JOB_PARAM_KEY, scheduleJob);
+        	dataMap.put(ScheduleJob.JOB_PARAM_KEY, scheduleJob);
         	
             scheduler.triggerJob(getJobKey(scheduleJob.getId()), dataMap);
         } catch (SchedulerException e) {

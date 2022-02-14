@@ -1,6 +1,6 @@
 package com.athena.modules.sys.service.impl;
 
-import com.athena.modules.sys.entity.SysRolePermissionEntity;
+import com.athena.modules.sys.entity.SysRolePermission;
 import com.athena.modules.sys.mapper.SysRolePermissionMapper;
 import com.athena.modules.sys.service.SysRolePermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,8 +16,8 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-@Service("sysRoleMenuService")
-public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionMapper, SysRolePermissionEntity> implements SysRolePermissionService {
+@Service
+public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionMapper, SysRolePermission> implements SysRolePermissionService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -31,11 +31,11 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 
 		//保存角色与菜单关系
 		for(String permissionId : permissionIds){
-			SysRolePermissionEntity sysRolePermissionEntity = new SysRolePermissionEntity();
-			sysRolePermissionEntity.setPermissionId(permissionId);
-			sysRolePermissionEntity.setRoleId(roleId);
+			SysRolePermission sysRolePermission = new SysRolePermission();
+			sysRolePermission.setPermissionId(permissionId);
+			sysRolePermission.setRoleId(roleId);
 
-			this.save(sysRolePermissionEntity);
+			this.save(sysRolePermission);
 		}
 	}
 

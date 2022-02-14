@@ -1,7 +1,7 @@
 package com.athena.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.athena.modules.sys.entity.SysUserEntity;
+import com.athena.modules.sys.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,17 +12,12 @@ import java.util.List;
  * @author Mr.sun
  */
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+public interface SysUserMapper extends BaseMapper<SysUser> {
 	
 	/**
 	 * 查询用户的所有权限
-	 * @param userId  用户ID
+	 * @param username  用户ID
 	 */
-	List<String> queryAllPerms(String userId);
-	
-	/**
-	 * 根据用户名，查询系统用户
-	 */
-	SysUserEntity queryByUserName(String username);
+	List<String> queryAllPerms(String username);
 
 }

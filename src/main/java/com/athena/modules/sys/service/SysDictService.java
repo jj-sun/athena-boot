@@ -18,6 +18,8 @@ public interface SysDictService extends IService<SysDict> {
 
     PageUtils queryPage(SysDict dict, PageDto pageDto);
 
+    boolean deleteEntity(String id);
+
     /**
      * 通过查询指定table的 text code key 获取字典值，可批量查询
      *

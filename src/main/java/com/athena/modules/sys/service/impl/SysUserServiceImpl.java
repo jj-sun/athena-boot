@@ -3,8 +3,8 @@ package com.athena.modules.sys.service.impl;
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
-import com.athena.modules.sys.entity.SysUserEntity;
-import com.athena.modules.sys.entity.SysUserRoleEntity;
+import com.athena.modules.sys.entity.SysUser;
+import com.athena.modules.sys.entity.SysUserRole;
 import com.athena.modules.sys.mapper.SysUserMapper;
 import com.athena.modules.sys.service.SysUserRoleService;
 import com.athena.modules.sys.service.SysUserService;
@@ -26,37 +26,37 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-@Service("sysUserService")
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
+@Service
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
 
 	@Override
-	public PageUtils queryPage(SysUserEntity user, PageDto pageDto) {
+	public PageUtils queryPage(SysUser user, PageDto pageDto) {
 
-		IPage<SysUserEntity> page = this.page(
-			new Query<SysUserEntity>().getPage(pageDto),
-			new LambdaQueryWrapper<SysUserEntity>()
-				.like(StringUtils.isNotBlank(user.getUsername()),SysUserEntity::getUsername, user.getUsername())
-				.like(StringUtils.isNotBlank(user.getRealname()), SysUserEntity::getRealname, user.getRealname())
+		IPage<SysUser> page = this.page(
+			new Query<SysUser>().getPage(pageDto),
+			new LambdaQueryWrapper<SysUser>()
+				.like(StringUtils.isNotBlank(user.getUsername()), SysUser::getUsername, user.getUsername())
+				.like(StringUtils.isNotBlank(user.getRealname()), SysUser::getRealname, user.getRealname())
 		);
 
 		return new PageUtils(page);
 	}
 
 	@Override
-	public List<String> queryAllPerms(String userId) {
-		return baseMapper.queryAllPerms(userId);
+	public List<String> queryAllPerms(String username) {
+		return baseMapper.queryAllPerms(username);
 	}
 
 	@Override
-	public SysUserEntity queryByUserName(String username) {
-		return baseMapper.queryByUserName(username);
+	public SysUser queryByUserName(String username) {
+		return this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void saveUser(SysUserEntity user) {
+	public void saveUser(SysUser user) {
 		//sha256加密
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		if(StringUtils.isBlank(user.getPassword())) {
@@ -72,7 +72,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void update(SysUserEntity user) {
+	public void update(SysUser user) {
 
 		this.updateById(user);
 		
@@ -90,15 +90,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 	@Override
 	public void deleteBatch(List<String> ids) {
 		this.removeByIds(ids);
-		sysUserRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>().in(SysUserRoleEntity::getUserId, ids));
+		sysUserRoleService.remove(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, ids));
 	}
 
 	@Override
 	public boolean updatePassword(String username, String newPassword) {
-		SysUserEntity userEntity = new SysUserEntity();
+		SysUser userEntity = new SysUser();
 		userEntity.setPassword(newPassword);
 		return this.update(userEntity,
-				new QueryWrapper<SysUserEntity>().eq("username", username));
+				new QueryWrapper<SysUser>().eq("username", username));
 	}
 
 

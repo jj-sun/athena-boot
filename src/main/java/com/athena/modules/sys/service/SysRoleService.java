@@ -2,7 +2,7 @@ package com.athena.modules.sys.service;
 
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
-import com.athena.modules.sys.entity.SysRoleEntity;
+import com.athena.modules.sys.entity.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-public interface SysRoleService extends IService<SysRoleEntity> {
+public interface SysRoleService extends IService<SysRole> {
 
-	PageUtils queryPage(SysRoleEntity role, PageDto pageDto);
+	PageUtils queryPage(SysRole role, PageDto pageDto);
 
 	boolean deleteEntity(String id);
 

@@ -3,7 +3,7 @@ package com.athena.modules.sys.service.impl;
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
-import com.athena.modules.sys.entity.SysRoleEntity;
+import com.athena.modules.sys.entity.SysRole;
 import com.athena.modules.sys.mapper.SysRoleMapper;
 import com.athena.modules.sys.service.SysRolePermissionService;
 import com.athena.modules.sys.service.SysRoleService;
@@ -21,18 +21,18 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-@Service("sysRoleService")
-public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
+@Service
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 	@Autowired
 	private SysRolePermissionService sysRolePermissionService;
     @Autowired
     private SysUserRoleService sysUserRoleService;
 
 	@Override
-	public PageUtils queryPage(SysRoleEntity role, PageDto pageDto) {
+	public PageUtils queryPage(SysRole role, PageDto pageDto) {
 
-		IPage<SysRoleEntity> page = this.page(
-			new Query<SysRoleEntity>().getPage(pageDto)
+		IPage<SysRole> page = this.page(
+			new Query<SysRole>().getPage(pageDto)
 		);
 
 		return new PageUtils(page);
@@ -41,13 +41,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteEntity(String id) {
-		this.removeById(id);
 		//删除角色与菜单关联
 		sysRolePermissionService.deleteBatch(List.of(id));
 
 		//删除角色与用户关联
 		sysUserRoleService.deleteBatch(List.of(id));
-		return false;
+		return this.removeById(id);
 	}
 
 	@Override

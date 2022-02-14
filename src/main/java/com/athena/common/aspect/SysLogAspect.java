@@ -1,9 +1,11 @@
 package com.athena.common.aspect;
 
-import com.athena.common.annotation.SysLog;
+import com.athena.common.annotation.Log;
+import com.athena.common.constant.Constant;
 import com.athena.common.utils.HttpContextUtils;
 import com.athena.common.utils.IPUtils;
-import com.athena.modules.sys.entity.SysLogEntity;
+import com.athena.modules.sys.entity.SysLog;
+import com.athena.modules.sys.form.LoginUser;
 import com.athena.modules.sys.service.SysLogService;
 import com.google.gson.Gson;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,10 +14,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 
 /**
@@ -29,7 +33,7 @@ public class SysLogAspect {
 	@Autowired
 	private SysLogService sysLogService;
 	
-	@Pointcut("@annotation(com.athena.common.annotation.SysLog)")
+	@Pointcut("@annotation(com.athena.common.annotation.Log)")
 	public void logPointCut() { 
 		
 	}
@@ -52,8 +56,9 @@ public class SysLogAspect {
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 		Method method = signature.getMethod();
 
-		SysLogEntity sysLog = new SysLogEntity();
-		SysLog syslog = method.getAnnotation(SysLog.class);
+		SysLog sysLog = new SysLog();
+		sysLog.setLogType(Constant.LogType.OPERATE.getValue());
+		Log syslog = method.getAnnotation(Log.class);
 		if(syslog != null){
 			//注解上的描述
 			sysLog.setOperation(syslog.value());
@@ -80,11 +85,11 @@ public class SysLogAspect {
 		sysLog.setTime(time);
 
 		//用户名
-		//String username = ((SysUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-		//sysLog.setUsername(username);
+		String username = ((LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getUsername();
+		sysLog.setUsername(username);
 
-		//sysLog.setTime(time);
-		//sysLog.setCreateDate(new Date());
+		sysLog.setTime(time);
+		sysLog.setCreateDate(new Date());
 		//保存系统日志
 		sysLogService.save(sysLog);
 	}

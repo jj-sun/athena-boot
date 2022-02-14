@@ -4,14 +4,10 @@
 <mapper namespace="com.athena.modules.sys.mapper.SysUserMapper">
 	<!-- 查询用户的所有权限 -->
 	<select id="queryAllPerms" resultType="string">
-		select m.perms from sys_user_role ur 
-			LEFT JOIN sys_role_permission rm on ur.role_id = rm.role_id
-			LEFT JOIN sys_permission m on rm.permission_id = m.id
-		where ur.user_id = #{userId}
+		SELECT DISTINCT m.perms FROM sys_user_role ur
+			LEFT JOIN sys_role_permission rm ON ur.role_id = rm.role_id
+			LEFT JOIN sys_permission m ON rm.permission_id = m.id
+			LEFT JOIN sys_user u ON u.id = ur.user_id
+		WHERE LENGTH(m.perms) > 0 AND u.username = #{username}
 	</select>
-	
-	<select id="queryByUserName" resultType="com.athena.modules.sys.entity.SysUserEntity">
-		select * from sys_user where username = #{username}
-	</select>
-
 </mapper>

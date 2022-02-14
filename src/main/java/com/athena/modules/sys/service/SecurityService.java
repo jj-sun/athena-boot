@@ -1,7 +1,5 @@
 package com.athena.modules.sys.service;
 
-import com.athena.modules.sys.entity.SysUserEntity;
-
 import java.util.Set;
 
 /**
@@ -15,9 +13,4 @@ public interface SecurityService {
      */
     Set<String> getUserPermissions(String username);
 
-    /**
-     * 根据用户ID，查询用户
-     * @param userId
-     */
-    SysUserEntity queryUser(String userId);
 }

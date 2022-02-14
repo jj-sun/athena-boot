@@ -1,8 +1,7 @@
 package com.athena.modules.sys.service.impl;
 
 import com.athena.common.constant.Constant;
-import com.athena.modules.sys.entity.SysPermissionEntity;
-import com.athena.modules.sys.entity.SysUserEntity;
+import com.athena.modules.sys.entity.SysPermission;
 import com.athena.modules.sys.mapper.SysPermissionMapper;
 import com.athena.modules.sys.mapper.SysUserMapper;
 import com.athena.modules.sys.service.SecurityService;
@@ -28,9 +27,9 @@ public class SecurityServiceImpl implements SecurityService {
 
         //系统管理员，拥有最高权限
         if(username.equals(Constant.SUPER_ADMIN)){
-            List<SysPermissionEntity> menuList = sysPermissionMapper.selectList(null);
+            List<SysPermission> menuList = sysPermissionMapper.selectList(null);
             permsList = new ArrayList<>(menuList.size());
-            for(SysPermissionEntity menu : menuList){
+            for(SysPermission menu : menuList){
                 permsList.add(menu.getPerms());
             }
         }else{
@@ -45,10 +44,5 @@ public class SecurityServiceImpl implements SecurityService {
             permsSet.addAll(Arrays.asList(perms.trim().split(",")));
         }
         return permsSet;
-    }
-
-    @Override
-    public SysUserEntity queryUser(String userId) {
-        return sysUserMapper.selectById(userId);
     }
 }

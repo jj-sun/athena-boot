@@ -1,9 +1,8 @@
 package com.athena.modules.sys.form;
 
-import com.athena.modules.sys.entity.SysUserEntity;
+import com.athena.modules.sys.entity.SysUser;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
@@ -22,7 +21,7 @@ public class LoginUser implements UserDetails {
     @Serial
     private static final long serialVersionUID = -3519083953528868241L;
 
-    private SysUserEntity user;
+    private SysUser user;
 
     private List<? extends GrantedAuthority> authorityList;
 

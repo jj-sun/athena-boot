@@ -1,10 +1,10 @@
 package com.athena.modules.sys.controller;
 
-import com.athena.common.annotation.SysLog;
+import com.athena.common.annotation.Log;
 import com.athena.common.constant.Constant;
 import com.athena.common.exception.RRException;
 import com.athena.common.utils.Result;
-import com.athena.modules.sys.entity.SysPermissionEntity;
+import com.athena.modules.sys.entity.SysPermission;
 import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysPermissionService;
 import com.athena.modules.sys.vo.SysMenuTree;
@@ -35,7 +35,7 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/nav")
 	public Result<Map<String, Object>> nav(){
-		List<SysMenuTree> menuTree = sysPermissionService.getUserMenuTree(getUsername());
+		List<SysMenuTree> menuTree = sysPermissionService.getUserPermissionTree(getUsername());
 		Set<String> permissions = securityService.getUserPermissions(getUsername());
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("menuTree", menuTree);
@@ -48,8 +48,8 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/list")
 	//@PreAuthorize("hasAuthority('sys:menu:list')")
-	public Result<List<SysPermissionEntity>> list(){
-		List<SysPermissionEntity> menuList = sysPermissionService.permissionTree();
+	public Result<List<SysPermission>> list(){
+		List<SysPermission> menuList = sysPermissionService.permissionTree();
 		return Result.ok(menuList);
 	}
 	
@@ -70,18 +70,18 @@ public class SysPermissionController extends AbstractController {
 	 */
 	@GetMapping("/info/{id}")
 	//@PreAuthorize("hasAuthority('sys:menu:info')")
-	public Result<SysPermissionEntity> info(@PathVariable("id") String id){
-		SysPermissionEntity menu = sysPermissionService.getById(id);
+	public Result<SysPermission> info(@PathVariable("id") String id){
+		SysPermission menu = sysPermissionService.getById(id);
 		return Result.ok(menu);
 	}
 	
 	/**
 	 * 保存
 	 */
-	@SysLog("保存菜单")
+	@Log("保存菜单")
 	@PostMapping("/save")
 	//@PreAuthorize("hasAuthority('sys:menu:save')")
-	public Result<Object> save(@RequestBody SysPermissionEntity menu){
+	public Result<Object> save(@RequestBody SysPermission menu){
 		//数据校验
 		verifyForm(menu);
 		
@@ -93,10 +93,10 @@ public class SysPermissionController extends AbstractController {
 	/**
 	 * 修改
 	 */
-	@SysLog("修改菜单")
+	@Log("修改菜单")
 	@PutMapping("/update")
 	//@PreAuthorize("hasAuthority('sys:menu:update')")
-	public Result<Object> update(@RequestBody SysPermissionEntity menu){
+	public Result<Object> update(@RequestBody SysPermission menu){
 		//数据校验
 		verifyForm(menu);
 				
@@ -108,13 +108,13 @@ public class SysPermissionController extends AbstractController {
 	/**
 	 * 删除
 	 */
-	@SysLog("删除菜单")
+	@Log("删除菜单")
 	@DeleteMapping("/delete")
 	//@PreAuthorize("hasAuthority('sys:menu:delete')")
 	public Result<Object> delete(@RequestParam(name = "id") String id){
 
 		//判断是否有子菜单或按钮
-		List<SysPermissionEntity> menuList = sysPermissionService.queryListParentId(id);
+		List<SysPermission> menuList = sysPermissionService.queryListParentId(id);
 		if(menuList.size() > 0){
 			return Result.error("请先删除子菜单或按钮");
 		}
@@ -127,7 +127,7 @@ public class SysPermissionController extends AbstractController {
 	/**
 	 * 验证参数是否正确
 	 */
-	private void verifyForm(SysPermissionEntity menu){
+	private void verifyForm(SysPermission menu){
 		if(StringUtils.isBlank(menu.getName())){
 			throw new RRException("菜单名称不能为空");
 		}
@@ -146,7 +146,7 @@ public class SysPermissionController extends AbstractController {
 		//上级菜单类型
 		int parentType = Constant.MenuType.CATALOG.getValue();
 		if(!menu.getParentId().equals("0")){
-			SysPermissionEntity parentMenu = sysPermissionService.getById(menu.getParentId());
+			SysPermission parentMenu = sysPermissionService.getById(menu.getParentId());
 			parentType = parentMenu.getType();
 		}
 		

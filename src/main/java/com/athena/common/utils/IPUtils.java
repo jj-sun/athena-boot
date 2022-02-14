@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Mr.sun
  */
 public class IPUtils {
-	private static Logger logger = LoggerFactory.getLogger(IPUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(IPUtils.class);
 
 	/**
 	 * 获取IP地址

@@ -9,6 +9,8 @@ public class Constant {
 	/** 超级管理员ID */
 	public static final String SUPER_ADMIN = "admin";
 
+    public static final String BASE_MENU_NAME = "首页";
+
     public static final String TREE_ROOT = "0";
     /**
      * 当前页码
@@ -38,10 +40,6 @@ public class Constant {
 
 	/**
 	 * 菜单类型
-	 * 
-	 * @author chenshun
-	 * @email sunlightcs@gmail.com
-	 * @date 2016年11月15日 下午1:24:29
 	 */
     public enum MenuType {
         /**
@@ -57,7 +55,7 @@ public class Constant {
          */
         BUTTON(2);
 
-        private int value;
+        private final int value;
 
         MenuType(int value) {
             this.value = value;
@@ -70,10 +68,6 @@ public class Constant {
     
     /**
      * 定时任务状态
-     * 
-     * @author chenshun
-     * @email sunlightcs@gmail.com
-     * @date 2016年12月3日 上午12:07:22
      */
     public enum ScheduleStatus {
         /**
@@ -95,35 +89,6 @@ public class Constant {
             return value;
         }
     }
-
-    /**
-     * 云服务商
-     */
-    public enum CloudService {
-        /**
-         * 七牛云
-         */
-        QINIU(1),
-        /**
-         * 阿里云
-         */
-        ALIYUN(2),
-        /**
-         * 腾讯云
-         */
-        QCLOUD(3);
-
-        private int value;
-
-        CloudService(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-
 
     public enum DelFlag {
         /**
@@ -152,8 +117,8 @@ public class Constant {
         LIST(0, "目录"),
         MENU(1, "菜单"),
         BUTTON(2, "按钮");
-        private int value;
-        private String name;
+        private final int value;
+        private final String name;
         PermissionType(int value, String name) {
             this.value = value;
             this.name = name;
@@ -162,5 +127,22 @@ public class Constant {
             return value;
         }
 
+    }
+
+    public enum LogType {
+        /**
+         * 日志类型
+         */
+        LOGIN(0, "登录日志"),
+        OPERATE(1, "操作日志");
+        private final int value;
+        private final String name;
+        LogType(int value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+        public int getValue() {
+            return value;
+        }
     }
 }

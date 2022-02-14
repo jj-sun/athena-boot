@@ -3,8 +3,7 @@
 package com.athena.modules.job.utils;
 
 import com.athena.common.utils.SpringContextUtils;
-import com.athena.modules.job.entity.ScheduleJobEntity;
-import com.athena.modules.job.entity.ScheduleJobLogEntity;
+import com.athena.modules.job.entity.ScheduleJobLog;
 import com.athena.modules.job.service.ScheduleJobLogService;
 import org.apache.commons.lang.StringUtils;
 import org.quartz.JobExecutionContext;
@@ -27,18 +26,18 @@ public class ScheduleJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        ScheduleJobEntity scheduleJob = (ScheduleJobEntity) context.getMergedJobDataMap()
-        		.get(ScheduleJobEntity.JOB_PARAM_KEY);
+        com.athena.modules.job.entity.ScheduleJob scheduleJob = (com.athena.modules.job.entity.ScheduleJob) context.getMergedJobDataMap()
+        		.get(com.athena.modules.job.entity.ScheduleJob.JOB_PARAM_KEY);
         
         //获取spring bean
         ScheduleJobLogService scheduleJobLogService = (ScheduleJobLogService) SpringContextUtils.getBean("scheduleJobLogService");
         
         //数据库保存执行记录
-        ScheduleJobLogEntity log = new ScheduleJobLogEntity();
+        ScheduleJobLog log = new ScheduleJobLog();
         log.setJobId(scheduleJob.getId());
         log.setBeanName(scheduleJob.getBeanName());
-        log.setParams(scheduleJob.getParams());
-        log.setCreateTime(new Date());
+        log.setParameter(scheduleJob.getParameter());
+        log.setCtime(new Date());
         
         //任务开始时间
         long startTime = System.currentTimeMillis();
@@ -49,7 +48,7 @@ public class ScheduleJob extends QuartzJobBean {
 
 			Object target = SpringContextUtils.getBean(scheduleJob.getBeanName());
 			Method method = target.getClass().getDeclaredMethod("run", String.class);
-			method.invoke(target, scheduleJob.getParams());
+			method.invoke(target, scheduleJob.getParameter());
 			
 			//任务执行总时长
 			long times = System.currentTimeMillis() - startTime;

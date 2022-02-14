@@ -1,6 +1,5 @@
 package com.athena.modules.sys.service.impl;
 
-import com.athena.common.base.tree.BaseTree;
 import com.athena.common.constant.Constant;
 import com.athena.common.utils.TreeUtils;
 import com.athena.modules.sys.entity.SysDept;
@@ -46,12 +45,12 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     @Override
-    public List<BaseTree<SysDept>> treeSelect() {
+    public List<SysDeptTree> treeSelect() {
         List<SysDept> sysDeptList = this.list();
-        List<BaseTree<SysDept>> menuTreeList = Lists.newArrayList();
+        List<SysDeptTree> menuTreeList = Lists.newArrayList();
         if(!CollectionUtils.isEmpty(sysDeptList)) {
             sysDeptList.forEach(sysDept -> menuTreeList.add(new SysDeptTree(sysDept)));
-            List<BaseTree<SysDept>> root = menuTreeList.stream().filter(sysMenuTree -> sysMenuTree.getParentKey().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
+            List<SysDeptTree> root = menuTreeList.stream().filter(sysMenuTree -> sysMenuTree.getParentKey().equals(Constant.TREE_ROOT)).collect(Collectors.toList());
             if(!CollectionUtils.isEmpty(root)) {
                 TreeUtils.buildTree(root, menuTreeList);
                 return root;

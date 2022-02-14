@@ -1,13 +1,13 @@
 package com.athena.modules.sys.controller;
 
-import com.athena.common.annotation.SysLog;
-import com.athena.common.base.tree.BaseTree;
+import com.athena.common.annotation.Log;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.ValidatorUtils;
 import com.athena.common.validator.group.AddGroup;
 import com.athena.common.validator.group.UpdateGroup;
 import com.athena.modules.sys.entity.SysDept;
 import com.athena.modules.sys.service.SysDeptService;
+import com.athena.modules.sys.vo.SysDeptTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +41,9 @@ public class SysDeptController {
      */
     @GetMapping("/select")
     //@PreAuthorize("hasAuthority('sys:menu:select')")
-    public Result<List<BaseTree<SysDept>>> select(){
+    public Result<List<SysDeptTree>> select(){
         //查询列表数据
-        List<BaseTree<SysDept>> menuList = deptService.treeSelect();
+        List<SysDeptTree> menuList = deptService.treeSelect();
 
         return Result.ok(menuList);
     }
@@ -62,7 +62,7 @@ public class SysDeptController {
     /**
      * 保存部门
      */
-    @SysLog("保存部门")
+    @Log("保存部门")
     @PostMapping("/save")
     //@PreAuthorize("hasAuthority('sys:user:save')")
     public Result<Object> save(@RequestBody SysDept dept){
@@ -76,7 +76,7 @@ public class SysDeptController {
     /**
      * 修改部门
      */
-    @SysLog("修改部门")
+    @Log("修改部门")
     @PutMapping("/update")
     //@PreAuthorize("hasAuthority('sys:user:update')")
     public Result<Object> update(@RequestBody SysDept dept){
@@ -89,7 +89,7 @@ public class SysDeptController {
     /**
      * 删除部门
      */
-    @SysLog("删除部门")
+    @Log("删除部门")
     @DeleteMapping("/delete")
     //@PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<Object> delete(@RequestParam(name = "id") String id){
@@ -98,7 +98,7 @@ public class SysDeptController {
         return Result.ok();
     }
 
-    @SysLog("批量删除部门")
+    @Log("批量删除部门")
     @DeleteMapping("/deleteBatch")
     public Result<Object> deleteBatch(@RequestParam(name = "ids") String ids) {
         deptService.deleteBatch(Arrays.asList(ids.split(",")));

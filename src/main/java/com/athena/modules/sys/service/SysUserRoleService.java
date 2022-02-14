@@ -3,7 +3,7 @@
 package com.athena.modules.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.athena.modules.sys.entity.SysUserRoleEntity;
+import com.athena.modules.sys.entity.SysUserRole;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-public interface SysUserRoleService extends IService<SysUserRoleEntity> {
+public interface SysUserRoleService extends IService<SysUserRole> {
 	
 	void saveOrUpdate(String userId, List<String> roleIdList);
 	

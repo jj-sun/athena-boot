@@ -63,38 +63,25 @@ public class DictAspect {
     }
 
     /**
-     * 本方法针对返回对象为Result 的IPage的分页列表数据进行动态字典注入
-     * 字典注入实现 通过对实体类添加注解@dict 来标识需要的字典内容,字典分为单字典code即可 ，table字典 code table text配合使用与原来jeecg的用法相同
+     * 本方法针对返回对象为Result 的PageUtils的分页列表数据进行动态字典注入
+     * 字典注入实现 通过对实体类添加注解@dict 来标识需要的字典内容,字典分为单字典code即可 ，table字典 code table text配合使用
      * 示例为SysUser   字段为sex 添加了注解@Dict(dicCode = "sex") 会在字典服务立马查出来对应的text 然后在请求list的时候将这个字典text，已字段名称加_dictText形式返回到前端
      * 例输入当前返回值的就会多出一个sex_dictText字段
      * {
      *      sex:1,
      *      sex_dictText:"男"
      * }
-     * 前端直接取值sext_dictText在table里面无需再进行前端的字典转换了
-     *  customRender:function (text) {
-     *               if(text==1){
-     *                 return "男";
-     *               }else if(text==2){
-     *                 return "女";
-     *               }else{
-     *                 return text;
-     *               }
-     *             }
-     *             目前vue是这么进行字典渲染到table上的多了就很麻烦了 这个直接在服务端渲染完成前端可以直接用
-     * @param result
+     * @param result 返回值
      */
     private void parseDictText(Object result) {
-        if (result instanceof Result) {
-            if (((Result) result).getResult() instanceof PageUtils) {
+        if (result instanceof Result && ((Result<?>) result).getResult() instanceof PageUtils pageUtils) {
                 List<JSONObject> items = new ArrayList<>();
-
                 //step.1 筛选出加了 Dict 注解的字段列表
                 List<Field> dictFieldList = new ArrayList<>();
                 // 字典数据列表， key = 字典code，value=数据列表
                 Map<String, List<String>> dataListMap =  Maps.newHashMap();
 
-                for (Object record : ((PageUtils) ((Result) result).getResult()).getList()) {
+                for (Object record : pageUtils.getList()) {
                     ObjectMapper mapper = new ObjectMapper();
                     String json="{}";
                     try {
@@ -107,10 +94,10 @@ public class DictAspect {
                     // 遍历所有字段，把字典Code取出来，放到 map 里
                     for (Field field : ConvertUtils.getAllFields(record)) {
                         String value = item.getString(field.getName());
-                        if (ConvertUtils.isEmpty(value)) {
+                        if (StringUtils.isBlank(value)) {
                             continue;
                         }
-                        if (field.getAnnotation(Dict.class) != null) {
+                        if (Objects.nonNull(field.getAnnotation(Dict.class))) {
                             if (!dictFieldList.contains(field)) {
                                 dictFieldList.add(field);
                             }
@@ -127,8 +114,8 @@ public class DictAspect {
                             this.listAddAllDeduplicate(dataList, Arrays.asList(value.split(",")));
                         }
                         //date类型默认转换string格式化日期
-                        if ("java.util.Date".equals(field.getType().getName()) && field.getAnnotation(JsonFormat.class)==null&&item.get(field.getName())!=null){
-                            SimpleDateFormat aDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        if ("java.util.Date".equals(field.getType().getName()) && Objects.isNull(field.getAnnotation(JsonFormat.class)) && Objects.nonNull(item.get(field.getName()))){
+                            SimpleDateFormat aDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             item.put(field.getName(), aDate.format(new Date((Long) item.get(field.getName()))));
                         }
                     }
@@ -171,11 +158,8 @@ public class DictAspect {
                         }
                     }
                 }
-
-                ((PageUtils) ((Result) result).getResult()).setList(items);
+                pageUtils.setList(items);
             }
-
-        }
     }
 
     /**
@@ -183,7 +167,7 @@ public class DictAspect {
      */
     private void listAddAllDeduplicate(List<String> dataList, List<String> addList) {
         // 筛选出dataList中没有的数据
-        List<String> filterList = addList.stream().filter(i -> !dataList.contains(i)).toList();
+        List<String> filterList = addList.stream().filter(add -> !dataList.contains(add)).toList();
         dataList.addAll(filterList);
     }
 
@@ -191,7 +175,7 @@ public class DictAspect {
      * 一次性把所有的字典都翻译了
      * 1.  所有的普通数据字典的所有数据只执行一次SQL
      * 2.  表字典相同的所有数据只执行一次SQL
-     * @param dataListMap
+     * @param dataListMap 字典数据列表， key = 字典code，value=数据列表
      * @return
      */
     private Map<String, List<DictModel>> translateAllDict(Map<String, List<String>> dataListMap) {
@@ -214,7 +198,7 @@ public class DictAspect {
                 }
                 if (dictCode.contains(",")) {
                     String keyString = String.format("sys:cache:dictTable::SimpleKey [%s,%s]", dictCode, data);
-                    if (redisTemplate.hasKey(keyString)) {
+                    if (Boolean.TRUE.equals(redisTemplate.hasKey(keyString))) {
                         try {
                             String text = ConvertUtils.getString(redisTemplate.opsForValue().get(keyString));
                             List<DictModel> list = translText.computeIfAbsent(dictCode, k -> new ArrayList<>());
@@ -228,7 +212,7 @@ public class DictAspect {
                     }
                 } else {
                     String keyString = String.format("sys:cache:dict::%s:%s", dictCode, data);
-                    if (redisTemplate.hasKey(keyString)) {
+                    if (Boolean.TRUE.equals(redisTemplate.hasKey(keyString))) {
                         try {
                             String text = ConvertUtils.getString(redisTemplate.opsForValue().get(keyString));
                             List<DictModel> list = translText.computeIfAbsent(dictCode, k -> new ArrayList<>());

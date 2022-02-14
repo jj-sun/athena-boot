@@ -1,7 +1,7 @@
 package com.athena.modules.sys.service;
 
-import com.athena.common.base.tree.BaseTree;
 import com.athena.modules.sys.entity.SysDept;
+import com.athena.modules.sys.vo.SysDeptTree;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public interface SysDeptService extends IService<SysDept> {
      * 树形选择
      * @return
      */
-    List<BaseTree<SysDept>> treeSelect();
+    List<SysDeptTree> treeSelect();
 
     boolean deleteBatch(List<String> ids);
 }

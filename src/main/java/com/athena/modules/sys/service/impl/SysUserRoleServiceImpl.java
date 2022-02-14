@@ -1,6 +1,6 @@
 package com.athena.modules.sys.service.impl;
 
-import com.athena.modules.sys.entity.SysUserRoleEntity;
+import com.athena.modules.sys.entity.SysUserRole;
 import com.athena.modules.sys.mapper.SysUserRoleMapper;
 import com.athena.modules.sys.service.SysUserRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -16,13 +16,13 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-@Service("sysUserRoleService")
-public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRoleEntity> implements SysUserRoleService {
+@Service
+public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
 	@Override
 	public void saveOrUpdate(String userId, List<String> roleIdList) {
 		//先删除用户与角色关系
-		this.remove(new LambdaQueryWrapper<SysUserRoleEntity>().eq(SysUserRoleEntity::getUserId, userId));
+		this.remove(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
 
 		if(roleIdList == null || roleIdList.size() == 0){
 			return ;
@@ -30,10 +30,10 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
 		//保存用户与角色关系
 		for(String roleId : roleIdList){
-			SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
-			sysUserRoleEntity.setUserId(userId);
-			sysUserRoleEntity.setRoleId(roleId);
-			this.save(sysUserRoleEntity);
+			SysUserRole sysUserRole = new SysUserRole();
+			sysUserRole.setUserId(userId);
+			sysUserRole.setRoleId(roleId);
+			this.save(sysUserRole);
 		}
 	}
 

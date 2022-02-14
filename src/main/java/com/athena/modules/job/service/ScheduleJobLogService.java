@@ -2,7 +2,7 @@ package com.athena.modules.job.service;
 
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
-import com.athena.modules.job.entity.ScheduleJobLogEntity;
+import com.athena.modules.job.entity.ScheduleJobLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *
  * @author Mr.sun
  */
-public interface ScheduleJobLogService extends IService<ScheduleJobLogEntity> {
+public interface ScheduleJobLogService extends IService<ScheduleJobLog> {
 
-	PageUtils queryPage(ScheduleJobLogEntity scheduleJobLog, PageDto pageDto);
+	PageUtils queryPage(ScheduleJobLog scheduleJobLog, PageDto pageDto);
 	
 }
