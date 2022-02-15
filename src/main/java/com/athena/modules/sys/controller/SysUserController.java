@@ -93,7 +93,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@Log("保存用户")
 	@PostMapping("/save")
-	//@PreAuthorize("hasAuthority('sys:user:save')")
+	@PreAuthorize("hasAuthority('sys:user:save')")
 	public Result<Object> save(@RequestBody SysUser user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
@@ -107,7 +107,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@Log("修改用户")
 	@PutMapping("/update")
-	//@PreAuthorize("hasAuthority('sys:user:update')")
+	@PreAuthorize("hasAuthority('sys:user:update')")
 	public Result<Object> update(@RequestBody SysUser user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
@@ -121,7 +121,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@Log("删除用户")
 	@DeleteMapping("/delete")
-	//@PreAuthorize("hasAuthority('sys:user:delete')")
+	@PreAuthorize("hasAuthority('sys:user:delete')")
 	public Result<Object> delete(@RequestParam(name = "id") String id){
 		sysUserService.deleteEntity(id);
 		return Result.ok();
@@ -129,6 +129,7 @@ public class SysUserController extends AbstractController {
 
 	@Log("批量删除用户")
 	@DeleteMapping("/deleteBatch")
+	@PreAuthorize("hasAuthority('sys:user:deleteBatch')")
 	public Result<Object> deleteBatch(@RequestParam(name = "ids") String ids) {
 		sysUserService.deleteBatch(Arrays.asList(ids.split(",")));
 		return Result.ok();

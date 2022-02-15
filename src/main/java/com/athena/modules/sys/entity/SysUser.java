@@ -59,6 +59,11 @@ public class SysUser extends BasePo implements Serializable {
 	private String mobile;
 
 	/**
+	 * 性别
+	 */
+	private Integer sex;
+
+	/**
 	 * 部门code
 	 */
 	private String deptCode;

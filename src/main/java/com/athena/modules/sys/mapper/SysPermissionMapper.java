@@ -17,6 +17,6 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 	/**
 	 * 查询用户的所有菜单ID
 	 */
-	List<String> queryAllMenuId(String username);
+	List<String> queryAllMenuId(String userId);
 
 }

@@ -6,7 +6,7 @@
 	<select id="queryAllMenuId" resultType="java.lang.String">
 		select distinct rm.permission_id from sys_user_role ur
 		LEFT JOIN sys_role_permission rm on ur.role_id = rm.role_id
-		where ur.user_id = #{username}
+		where ur.user_id = #{userId}
 	</select>
 
 </mapper>

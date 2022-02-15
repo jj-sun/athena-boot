@@ -33,11 +33,11 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
         }
         String creator = "creator";
         if (Objects.isNull(this.getFieldValByName(creator, metaObject)) && !Objects.isNull(loginUser)) {
-            this.setFieldValByName(creator, loginUser.getUsername(), metaObject);
+            this.setFieldValByName(creator, loginUser.getUser().getId(), metaObject);
         }
         String editor = "editor";
         if (Objects.isNull(this.getFieldValByName(editor, metaObject)) && !Objects.isNull(loginUser)) {
-            this.setFieldValByName(editor, loginUser.getUsername(), metaObject);
+            this.setFieldValByName(editor, loginUser.getUser().getId(), metaObject);
         }
         String delFlag = "delFlag";
         if (Objects.isNull(this.getFieldValByName(delFlag, metaObject))) {
@@ -53,7 +53,7 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
         this.setFieldValByName(mtimeStr, DateUtils.now(), metaObject);
         if (Objects.isNull(this.getFieldValByName(editor, metaObject)) && !Objects.isNull(loginUser)) {
-            this.setFieldValByName(editor, loginUser.getUsername(), metaObject);
+            this.setFieldValByName(editor, loginUser.getUser().getId(), metaObject);
         }
     }
 
