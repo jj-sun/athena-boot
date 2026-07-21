@@ -2,9 +2,9 @@ package com.athena.modules.job.entity;
 
 import com.athena.common.base.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
 

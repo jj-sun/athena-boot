@@ -1,3 +1,4 @@
+/*
 package com.athena.modules.sys.service.impl;
 
 import com.athena.modules.sys.entity.SysUser;
@@ -18,11 +19,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+*/
 /**
  * @author Mr.sun
  * @date 2021/12/14 11:32
  * @description
- */
+ *//*
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -51,3 +54,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
 }
+*/

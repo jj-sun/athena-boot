@@ -1,23 +1,22 @@
 package com.athena.common.aspect;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.athena.common.annotation.Log;
 import com.athena.common.constant.Constant;
 import com.athena.common.utils.HttpContextUtils;
 import com.athena.common.utils.IPUtils;
 import com.athena.modules.sys.entity.SysLog;
-import com.athena.modules.sys.form.LoginUser;
 import com.athena.modules.sys.service.SysLogService;
 import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Date;
 
@@ -85,7 +84,7 @@ public class SysLogAspect {
 		sysLog.setTime(time);
 
 		//用户名
-		String username = ((LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getUsername();
+		String username = StpUtil.getLoginIdAsString();
 		sysLog.setUsername(username);
 
 		sysLog.setTime(time);

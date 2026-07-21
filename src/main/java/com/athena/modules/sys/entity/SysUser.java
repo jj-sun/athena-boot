@@ -1,15 +1,17 @@
 package com.athena.modules.sys.entity;
 
+import com.athena.common.annotation.Dict;
 import com.athena.common.base.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.athena.common.validator.group.AddGroup;
 import com.athena.common.validator.group.UpdateGroup;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -66,6 +68,7 @@ public class SysUser extends BasePo implements Serializable {
 	/**
 	 * 部门code
 	 */
+	@Dict(dicCode = "id", dicText = "dept_name", dictTable = "sys_dept")
 	private String deptCode;
 
 	private Integer userType;

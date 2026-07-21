@@ -34,6 +34,17 @@ public class PermissionTest {
 
         permissionService.save(sysPermission);
     }
+    @Test
+    public void addRootChildren() {
+        SysPermission sysPermission = new SysPermission();
+        sysPermission.setParentId("1475678576111116290");
+        sysPermission.setName("统计报表");
+        sysPermission.setUrl("dashboard/report");
+        sysPermission.setComponent("/dashboard/report");
+        sysPermission.setType(1);
+
+        permissionService.save(sysPermission);
+    }
 
     @Test
     public void insertSystem(){

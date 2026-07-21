@@ -1,5 +1,8 @@
 package com.athena.modules.sys.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.secure.BCrypt;
+import cn.dev33.satoken.secure.SaSecureUtil;
 import com.athena.common.annotation.Log;
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
@@ -13,8 +16,6 @@ import com.athena.modules.sys.form.PasswordForm;
 import com.athena.modules.sys.service.SysUserRoleService;
 import com.athena.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -38,7 +39,7 @@ public class SysUserController extends AbstractController {
 	 * 所有用户列表
 	 */
 	@GetMapping("/list")
-	@PreAuthorize("hasAuthority('sys:user:list')")
+	@SaCheckPermission("sys:user:list")
 	public Result<PageUtils> list(SysUser user, PageDto pageDto){
 		PageUtils page = sysUserService.queryPage(user, pageDto);
 		return Result.ok(page);
@@ -49,7 +50,8 @@ public class SysUserController extends AbstractController {
 	 */
 	@GetMapping("/info")
 	public Result<SysUser> info(){
-		return Result.ok(getUser());
+
+		return Result.ok(null);
 	}
 	
 	/**
@@ -59,10 +61,10 @@ public class SysUserController extends AbstractController {
 	@PostMapping("/password")
 	public Result<Object> password(@RequestBody PasswordForm form){
 		Assert.isBlank(form.getNewPassword(), "新密码不为能空");
+		String md5 = SaSecureUtil.md5(form.getUsername() + ":" + form.getNewPassword());
 
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		//sha256加密
-		String newPassword = passwordEncoder.encode(form.getNewPassword());
+		String newPassword = BCrypt.hashpw(md5, BCrypt.gensalt());
 
 		//更新密码
 		boolean flag = sysUserService.updatePassword(getUsername(), newPassword);
@@ -93,7 +95,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@Log("保存用户")
 	@PostMapping("/save")
-	@PreAuthorize("hasAuthority('sys:user:save')")
+	@SaCheckPermission("sys:user:save")
 	public Result<Object> save(@RequestBody SysUser user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
@@ -107,7 +109,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@Log("修改用户")
 	@PutMapping("/update")
-	@PreAuthorize("hasAuthority('sys:user:update')")
+	@SaCheckPermission("sys:user:update")
 	public Result<Object> update(@RequestBody SysUser user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
@@ -121,7 +123,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@Log("删除用户")
 	@DeleteMapping("/delete")
-	@PreAuthorize("hasAuthority('sys:user:delete')")
+	@SaCheckPermission("sys:user:delete")
 	public Result<Object> delete(@RequestParam(name = "id") String id){
 		sysUserService.deleteEntity(id);
 		return Result.ok();
@@ -129,7 +131,7 @@ public class SysUserController extends AbstractController {
 
 	@Log("批量删除用户")
 	@DeleteMapping("/deleteBatch")
-	@PreAuthorize("hasAuthority('sys:user:deleteBatch')")
+	@SaCheckPermission("sys:user:deleteBatch")
 	public Result<Object> deleteBatch(@RequestParam(name = "ids") String ids) {
 		sysUserService.deleteBatch(Arrays.asList(ids.split(",")));
 		return Result.ok();

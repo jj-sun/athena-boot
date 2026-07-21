@@ -1,11 +1,12 @@
 package com.athena.common.validator;
 
 import com.athena.common.exception.RRException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.Set;
+
 
 /**
  * hibernate-validator校验工具类

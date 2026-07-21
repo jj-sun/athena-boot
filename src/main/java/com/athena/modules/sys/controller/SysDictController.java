@@ -2,6 +2,7 @@ package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.Log;
 import com.athena.common.base.dto.PageDto;
+import com.athena.common.cache.DictCache;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.ValidatorUtils;
@@ -56,6 +57,8 @@ public class SysDictController {
 
         dictService.save(dict);
 
+        DictCache.refreshAll();
+
         return Result.ok();
     }
 
@@ -69,6 +72,9 @@ public class SysDictController {
         ValidatorUtils.validateEntity(dict, UpdateGroup.class);
 
         dictService.updateById(dict);
+
+        DictCache.refreshAll();
+
         return Result.ok();
     }
 
@@ -80,6 +86,9 @@ public class SysDictController {
     //@PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<Object> delete(@RequestParam(name = "id") String id){
         dictService.deleteEntity(id);
+
+        DictCache.refreshAll();
+
         return Result.ok();
     }
 

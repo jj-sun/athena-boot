@@ -68,4 +68,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 		return baseMapper.queryRoleIdList(username);
 	}
 
+	@Override
+	public List<String> queryRoleCodeById(List<String> ids) {
+		return baseMapper.findRoleCodeById(ids);
+	}
 }

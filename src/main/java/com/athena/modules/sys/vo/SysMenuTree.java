@@ -30,7 +30,7 @@ public class SysMenuTree extends BaseTree<SysPermission> {
         SysPermission sysPermission = super.getInfo();
         super.setKey(sysPermission.getId());
         super.setParentKey(sysPermission.getParentId());
-        super.setLabel(sysPermission.getName());
+        super.setTitle(sysPermission.getName());
         super.setDisabled(sysPermission.getName().equals(Constant.BASE_MENU_NAME));
     }
 }

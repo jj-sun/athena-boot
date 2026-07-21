@@ -6,5 +6,13 @@
 	<!-- 查询用户创建的角色ID列表 -->
 	<select id="queryRoleIdList" resultType="string">
 		select id from sys_role where creator = #{createUserId}
-	</select> 
+	</select>
+	<select id="findRoleCodeById" resultType="java.lang.String">
+
+		SELECT role_code FROM sys_role WHERE id IN
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+
+	</select>
 </mapper>

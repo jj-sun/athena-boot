@@ -9,7 +9,7 @@ import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysPermissionService;
 import com.athena.modules.sys.vo.SysMenuTree;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

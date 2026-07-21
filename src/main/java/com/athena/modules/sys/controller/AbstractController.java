@@ -12,16 +12,9 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractController {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
-	
-	protected SysUser getUser() {
-		return SecurityUtil.getLoginUser();
-	}
 
-	protected String getUserId() {
-		return getUser().getId();
-	}
 
 	protected String getUsername() {
-		return getUser().getUsername();
+		return SecurityUtil.getLoginUsername();
 	}
 }

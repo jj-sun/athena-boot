@@ -1,6 +1,8 @@
 # Compiled class file
 *.class
 target
+.vscode
+maven-updates.txt
 
 # Log file
 *.log
@@ -14,4 +16,3 @@ target
 *.rar
 *.iml
 .idea
-

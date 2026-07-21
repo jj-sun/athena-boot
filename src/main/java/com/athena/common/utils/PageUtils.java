@@ -2,6 +2,7 @@ package com.athena.common.utils;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,12 +11,13 @@ import java.util.List;
  *
  * @author Mr.sun
  */
-public class PageUtils implements Serializable {
+public class PageUtils<T> implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 总记录数
 	 */
-	private int totalCount;
+	private int total;
 	/**
 	 * 每页记录数
 	 */
@@ -23,48 +25,49 @@ public class PageUtils implements Serializable {
 	/**
 	 * 总页数
 	 */
-	private int totalPage;
+	private int pages;
 	/**
 	 * 当前页数
 	 */
-	private int currPage;
+	private int current;
 	/**
 	 * 列表数据
 	 */
-	private List<?> list;
+	private List<T> list;
 	
 	/**
 	 * 分页
 	 * @param list        列表数据
-	 * @param totalCount  总记录数
+	 * @param total  总记录数
 	 * @param pageSize    每页记录数
-	 * @param currPage    当前页数
+	 * @param current    当前页数
 	 */
-	public PageUtils(List<?> list, int totalCount, int pageSize, int currPage) {
+	public PageUtils(List<T> list, int total, int pageSize, int current) {
 		this.list = list;
-		this.totalCount = totalCount;
+		this.total = total;
 		this.pageSize = pageSize;
-		this.currPage = currPage;
-		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
+		this.current = current;
+		this.pages = (int)Math.ceil((double) total /pageSize);
 	}
 
 	/**
 	 * 分页
 	 */
+	@SuppressWarnings("unchecked")
 	public PageUtils(IPage<?> page) {
-		this.list = page.getRecords();
-		this.totalCount = (int)page.getTotal();
+		this.list = (List<T>) page.getRecords();
+		this.total = (int)page.getTotal();
 		this.pageSize = (int)page.getSize();
-		this.currPage = (int)page.getCurrent();
-		this.totalPage = (int)page.getPages();
+		this.current = (int)page.getCurrent();
+		this.pages = (int)page.getPages();
 	}
 
-	public int getTotalCount() {
-		return totalCount;
+	public int getTotal() {
+		return total;
 	}
 
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
+	public void setTotal(int total) {
+		this.total = total;
 	}
 
 	public int getPageSize() {
@@ -75,27 +78,27 @@ public class PageUtils implements Serializable {
 		this.pageSize = pageSize;
 	}
 
-	public int getTotalPage() {
-		return totalPage;
+	public int getPages() {
+		return pages;
 	}
 
-	public void setTotalPage(int totalPage) {
-		this.totalPage = totalPage;
+	public void setPages(int pages) {
+		this.pages = pages;
 	}
 
-	public int getCurrPage() {
-		return currPage;
+	public int getCurrent() {
+		return current;
 	}
 
-	public void setCurrPage(int currPage) {
-		this.currPage = currPage;
+	public void setCurrent(int current) {
+		this.current = current;
 	}
 
-	public List<?> getList() {
+	public List<T> getList() {
 		return list;
 	}
 
-	public void setList(List<?> list) {
+	public void setList(List<T> list) {
 		this.list = list;
 	}
 	

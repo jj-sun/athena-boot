@@ -90,7 +90,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermission>().ne(SysPermission::getType, Constant.PermissionType.BUTTON.getValue()));
 		} else {
 			//用户菜单列表
-			List<String> menuIdList = this.getBaseMapper().queryAllMenuId(SecurityUtil.getLoginUser().getId());
+			List<String> menuIdList = this.getBaseMapper().queryAllMenuId(SecurityUtil.getUserId());
 			sysPermissionEntities = this.list(new LambdaQueryWrapper<SysPermission>().in(SysPermission::getId, menuIdList).ne(SysPermission::getType, Constant.PermissionType.BUTTON.getValue()));
 		}
 		return this.getTree(sysPermissionEntities);

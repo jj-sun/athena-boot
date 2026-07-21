@@ -2,11 +2,11 @@ package com.athena.config;
 
 import com.athena.common.constant.Constant;
 import com.athena.common.utils.DateUtils;
-import com.athena.modules.sys.form.LoginUser;
+import com.athena.common.utils.SecurityUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -22,7 +22,9 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        LoginUser loginUser = this.getLoginUser();
+
+        String username = getUsername();
+
         String ctimeStr = "ctime";
         if (Objects.isNull(this.getFieldValByName(ctimeStr, metaObject))) {
             this.setFieldValByName(ctimeStr, DateUtils.now(), metaObject);
@@ -32,12 +34,12 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
             this.setFieldValByName(mtimeStr, DateUtils.now(), metaObject);
         }
         String creator = "creator";
-        if (Objects.isNull(this.getFieldValByName(creator, metaObject)) && !Objects.isNull(loginUser)) {
-            this.setFieldValByName(creator, loginUser.getUser().getId(), metaObject);
+        if (Objects.isNull(this.getFieldValByName(creator, metaObject)) && StringUtils.isNoneBlank(username)) {
+            this.setFieldValByName(creator, username, metaObject);
         }
         String editor = "editor";
-        if (Objects.isNull(this.getFieldValByName(editor, metaObject)) && !Objects.isNull(loginUser)) {
-            this.setFieldValByName(editor, loginUser.getUser().getId(), metaObject);
+        if (Objects.isNull(this.getFieldValByName(editor, metaObject)) && StringUtils.isNoneBlank(username)) {
+            this.setFieldValByName(editor, username, metaObject);
         }
         String delFlag = "delFlag";
         if (Objects.isNull(this.getFieldValByName(delFlag, metaObject))) {
@@ -47,27 +49,24 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        LoginUser loginUser = this.getLoginUser();
         String mtimeStr = "mtime";
         String editor = "editor";
-
+        String username = getUsername();
         this.setFieldValByName(mtimeStr, DateUtils.now(), metaObject);
-        if (Objects.isNull(this.getFieldValByName(editor, metaObject)) && !Objects.isNull(loginUser)) {
-            this.setFieldValByName(editor, loginUser.getUser().getId(), metaObject);
+        if (Objects.isNull(this.getFieldValByName(editor, metaObject)) && StringUtils.isNoneBlank(username)) {
+            this.setFieldValByName(editor, username, metaObject);
         }
     }
 
-    /**
-     * 自动提交时可能无法获取用户信息。
-     * @return 用户信息
-     */
-    private LoginUser getLoginUser() {
-        LoginUser sysUser;
+    private String getUsername() {
+        String username;
         try {
-            sysUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null ? (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal() : null;
-        } catch (Exception e) {
-            sysUser = null;
+            username = SecurityUtil.getLoginUsername();
+        }catch (Exception e) {
+            username = "";
+            log.error("人员自动填充异常，无法获取登录用户名！{}", e.getMessage());
         }
-        return sysUser;
+        return username;
     }
+
 }

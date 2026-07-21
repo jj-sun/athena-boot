@@ -25,4 +25,7 @@ public interface SysRoleService extends IService<SysRole> {
 	 * 查询用户创建的角色ID列表
 	 */
 	List<String> queryRoleIdList(String username);
+
+
+	List<String> queryRoleCodeById(List<String> ids);
 }

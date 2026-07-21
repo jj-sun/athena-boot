@@ -22,7 +22,7 @@ public class Result<T> implements Serializable {
 
 	private String message;
 
-	private T result;
+	private T data;
 
 	private boolean success = true;
 
@@ -58,7 +58,7 @@ public class Result<T> implements Serializable {
 		r.setSuccess(false);
 		r.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		r.setMessage(msg);
-		r.setResult(data);
+		r.setData(data);
 		return r;
 	}
 
@@ -73,7 +73,7 @@ public class Result<T> implements Serializable {
 	public static<T> Result<T> ok(T data) {
 		Result<T> r = new Result<>();
 		r.setSuccess(true);
-		r.setResult(data);
+		r.setData(data);
 		r.setCode(HttpStatus.OK.value());
 		return r;
 	}
@@ -81,7 +81,7 @@ public class Result<T> implements Serializable {
 		Result<T> r = new Result<>();
 		r.setSuccess(true);
 		r.setCode(HttpStatus.OK.value());
-		r.setResult(data);
+		r.setData(data);
 		r.setMessage(msg);
 		return r;
 	}

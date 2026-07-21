@@ -23,7 +23,7 @@ public abstract class BaseTree<T> implements Serializable {
 
     private String parentKey;
 
-    private String label;
+    private String title;
 
     private boolean disabled;
 

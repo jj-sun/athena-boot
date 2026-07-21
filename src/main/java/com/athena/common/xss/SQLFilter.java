@@ -1,7 +1,7 @@
 package com.athena.common.xss;
 
 import com.athena.common.exception.RRException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * SQL过滤
@@ -32,7 +32,7 @@ public class SQLFilter {
 
         //判断是否包含非法字符
         for(String keyword : keywords){
-            if(str.indexOf(keyword) != -1){
+            if(str.contains(keyword)){
                 throw new RRException("包含非法字符");
             }
         }

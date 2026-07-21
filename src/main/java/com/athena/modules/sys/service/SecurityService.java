@@ -1,5 +1,6 @@
 package com.athena.modules.sys.service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,5 +13,7 @@ public interface SecurityService {
      * 获取用户权限列表
      */
     Set<String> getUserPermissions(String username);
+
+    List<String> getUserRoles(String username);
 
 }

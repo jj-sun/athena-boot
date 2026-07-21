@@ -2,6 +2,7 @@ package com.athena.modules.sys.controller;
 
 import com.athena.common.annotation.Log;
 import com.athena.common.base.dto.PageDto;
+import com.athena.common.cache.DictCache;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Result;
 import com.athena.common.validator.ValidatorUtils;
@@ -55,6 +56,11 @@ public class SysDictItemController {
 
         dictItemService.save(dictItem);
 
+        String dictCode = DictCache.getDictCodeById(dictItem.getDictId());
+        if (dictCode != null) {
+            DictCache.refreshDict(dictCode);
+        }
+
         return Result.ok();
     }
 
@@ -68,6 +74,12 @@ public class SysDictItemController {
         ValidatorUtils.validateEntity(dictItem, UpdateGroup.class);
 
         dictItemService.updateById(dictItem);
+
+        String dictCode = DictCache.getDictCodeById(dictItem.getDictId());
+        if (dictCode != null) {
+            DictCache.refreshDict(dictCode);
+        }
+
         return Result.ok();
     }
 
@@ -78,8 +90,14 @@ public class SysDictItemController {
     @DeleteMapping("/delete")
     //@PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<Object> delete(@RequestParam(name = "id") String id){
-
-        dictItemService.removeById(id);
+        SysDictItem dictItem = dictItemService.getById(id);
+        if (dictItem != null) {
+            String dictCode = DictCache.getDictCodeById(dictItem.getDictId());
+            dictItemService.removeById(id);
+            if (dictCode != null) {
+                DictCache.refreshDict(dictCode);
+            }
+        }
         return Result.ok();
     }
 

@@ -1,3 +1,4 @@
+/*
 package com.athena.filter;
 
 import com.athena.common.constant.RedisConstant;
@@ -9,33 +10,31 @@ import com.athena.modules.sys.form.LoginUser;
 import com.athena.modules.sys.service.SecurityService;
 import com.athena.modules.sys.service.SysUserService;
 import com.google.common.collect.Lists;
+import jakarta.annotation.Resource;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+*/
 /**
  * @author Mr.sun
  * @date 2021/12/14 15:35
  * @description
- */
+ *//*
+
 @Component
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
@@ -87,7 +86,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-    /**
+    */
+/**
      * JWTToken刷新生命周期 （实现： 用户在线操作不掉线功能）
      * 1、登录成功后将用户的JWT生成的Token作为k、v存储到cache缓存里面(这时候k、v值一样)，缓存有效期设置为Jwt有效时间的2倍
      * 2、当该用户再次请求时，通过JWTFilter层层校验之后会进入到doGetAuthenticationInfo进行身份验证
@@ -99,7 +99,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
      * @param username 用户名
      * @param password 密码
      * @return true or false
-     */
+     *//*
+
     public boolean jwtTokenRefresh(String token, String username, String password) {
         String cacheToken = redisUtils.get(RedisConstant.PREFIX_USER_TOKEN + token);
         if (StringUtils.isNotEmpty(cacheToken)) {
@@ -115,3 +116,4 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         return false;
     }
 }
+*/

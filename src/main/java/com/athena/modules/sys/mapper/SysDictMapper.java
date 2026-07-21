@@ -15,22 +15,9 @@ import java.util.List;
  */
 public interface SysDictMapper extends BaseMapper<SysDict> {
 
-    /**
-     * 15 字典表的 翻译，可批量
-     * @param table
-     * @param text
-     * @param code
-     * @param keys 多个用逗号分割
-     * @return
-     */
-    List<DictModel> queryTableDictTextByKeys(@Param("table") String table, @Param("text") String text, @Param("code") String code, @Param("keys") List<String> keys);
+    DictModel queryTableDictTextByKey(@Param("table") String table, @Param("text") String text, @Param("code") String code, @Param("key") String key);
 
-    /**
-     * 可通过多个字典code查询翻译文本
-     * @param dictCodeList 多个字典code
-     * @param keys 数据列表
-     * @return
-     */
-    List<DictModelMany> queryManyDictByKeys(@Param("dictCodeList") List<String> dictCodeList, @Param("keys") List<String> keys);
+    DictModel queryDictTextByKey(@Param("code") String code,@Param("key") String key);
+
 
 }

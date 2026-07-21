@@ -4,14 +4,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.athena.common.utils.Result;
 import com.athena.modules.monitor.domain.RedisInfo;
 import com.athena.modules.monitor.service.RedisService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class ActuatorRedisController {
   	        	list.add(map);
   	        	log.info(map.toString());
   	        }
-  	        res.setResult(list);
+  	        res.setData(list);
   	        res.success("查询成功");
   		} catch (Exception e) {
   			return Result.error("查询失败"+e.getMessage());

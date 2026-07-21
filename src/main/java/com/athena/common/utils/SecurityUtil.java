@@ -1,8 +1,6 @@
 package com.athena.common.utils;
 
-import com.athena.modules.sys.entity.SysUser;
-import com.athena.modules.sys.form.LoginUser;
-import org.springframework.security.core.context.SecurityContextHolder;
+import cn.dev33.satoken.stp.StpUtil;
 
 /**
  * @author Mr.sun
@@ -11,8 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class SecurityUtil {
 
-    public static SysUser getLoginUser() {
-        return ((LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+    public static String getUserId() {
+        //return ((LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        return StpUtil.getExtra("id").toString();
+    }
+
+    public static String getLoginUsername() {
+        return StpUtil.getLoginIdAsString();
     }
 
 }

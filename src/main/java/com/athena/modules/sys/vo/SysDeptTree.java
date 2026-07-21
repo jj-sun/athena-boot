@@ -25,6 +25,6 @@ public class SysDeptTree extends BaseTree<SysDept>{
         SysDept dept = super.getInfo();
         super.setKey(dept.getId());
         super.setParentKey(dept.getParentId());
-        super.setLabel(dept.getDeptName());
+        super.setTitle(dept.getDeptName());
     }
 }

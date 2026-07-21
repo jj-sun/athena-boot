@@ -1,3 +1,4 @@
+/*
 package com.athena.common.utils;
 
 import com.auth0.jwt.JWT;
@@ -12,22 +13,28 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Objects;
 
+*/
 /**
  * jwt工具类
  *
  * @author Mr.sun
- */
+ *//*
+
 public class JwtUtils {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
+    */
+/**
      * token过期时间为30分钟，以token在redis缓存的时间为准。
-     */
+     *//*
+
     public static final long EXPIRE = 30 * 60 * 1000;
 
-    /**
+    */
+/**
      * 生成jwt token
-     */
+     *//*
+
     public static String generateToken(String username, String secret) {
         Date nowDate = new Date();
         //过期时间
@@ -59,12 +66,15 @@ public class JwtUtils {
         }
     }
 
-    /**
+    */
+/**
      * token是否过期
      * @return  true：过期
-     */
+     *//*
+
     public static boolean isTokenExpired(Date expiration) {
         return expiration.before(new Date());
     }
 
 }
+*/

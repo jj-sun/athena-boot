@@ -1,5 +1,7 @@
 package com.athena.modules.sys.service.impl;
 
+import cn.dev33.satoken.secure.BCrypt;
+import cn.dev33.satoken.secure.SaSecureUtil;
 import com.athena.common.base.dto.PageDto;
 import com.athena.common.utils.PageUtils;
 import com.athena.common.utils.Query;
@@ -12,9 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,14 +59,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Transactional(rollbackFor = Exception.class)
 	public void saveUser(SysUser user) {
 		//sha256加密
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		if(StringUtils.isBlank(user.getPassword())) {
-			user.setPassword(passwordEncoder.encode("123456"));
+			String md5 = SaSecureUtil.md5(user.getUsername() + ":123456");
+			user.setPassword(BCrypt.hashpw(md5, BCrypt.gensalt()));
 		} else {
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			String md5 = SaSecureUtil.md5(user.getUsername() + ":" + user.getPassword());
+			user.setPassword(BCrypt.hashpw(md5, BCrypt.gensalt()));
 		}
 		this.save(user);
-		
+
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getId(), user.getRoleIdList());
 	}

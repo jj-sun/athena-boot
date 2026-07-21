@@ -5,7 +5,7 @@ package com.athena.modules.job.utils;
 import com.athena.common.utils.SpringContextUtils;
 import com.athena.modules.job.entity.ScheduleJobLog;
 import com.athena.modules.job.service.ScheduleJobLogService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;

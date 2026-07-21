@@ -51,18 +51,13 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     }
 
     @Override
-    public List<DictModel> queryTableDictTextByKeys(String table, String text, String code, List<String> keys) {
-        return this.getBaseMapper().queryTableDictTextByKeys(table,text,code,keys);
+    public DictModel queryTableDictTextByKey(String table, String text, String code, String key) {
+        return this.getBaseMapper().queryTableDictTextByKey(table, text, code, key);
     }
 
     @Override
-    public Map<String, List<DictModel>> queryManyDictByKeys(List<String> dictCodeList, List<String> keys) {
-        List<DictModelMany> list = this.getBaseMapper().queryManyDictByKeys(dictCodeList, keys);
-        Map<String, List<DictModel>> dictMap = new HashMap<>();
-        for (DictModelMany dict : list) {
-            List<DictModel> dictItemList = dictMap.computeIfAbsent(dict.getDictCode(), i -> new ArrayList<>());
-            dictItemList.add(new DictModel(dict.getValue(), dict.getText()));
-        }
-        return dictMap;
+    public DictModel queryDictTextByKey(String code, String key) {
+        return this.getBaseMapper().queryDictTextByKey(code, key);
     }
+
 }
