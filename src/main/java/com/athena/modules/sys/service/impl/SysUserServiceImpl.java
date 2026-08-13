@@ -8,6 +8,7 @@ import com.athena.common.utils.Query;
 import com.athena.modules.sys.entity.SysUser;
 import com.athena.modules.sys.entity.SysUserRole;
 import com.athena.modules.sys.mapper.SysUserMapper;
+import com.athena.modules.sys.service.SysDeptService;
 import com.athena.modules.sys.service.SysUserRoleService;
 import com.athena.modules.sys.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,15 +33,25 @@ import java.util.List;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
+	@Autowired
+	private SysDeptService sysDeptService;
 
 	@Override
 	public PageUtils queryPage(SysUser user, PageDto pageDto) {
+		LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<SysUser>()
+			.like(StringUtils.isNotBlank(user.getUsername()), SysUser::getUsername, user.getUsername())
+			.like(StringUtils.isNotBlank(user.getRealname()), SysUser::getRealname, user.getRealname());
+
+		if (StringUtils.isNotBlank(user.getDeptCode())) {
+			List<String> deptIds = sysDeptService.getSubDeptIds(user.getDeptCode());
+			if (!deptIds.isEmpty()) {
+				wrapper.in(SysUser::getDeptCode, deptIds);
+			}
+		}
 
 		IPage<SysUser> page = this.page(
 			new Query<SysUser>().getPage(pageDto),
-			new LambdaQueryWrapper<SysUser>()
-				.like(StringUtils.isNotBlank(user.getUsername()), SysUser::getUsername, user.getUsername())
-				.like(StringUtils.isNotBlank(user.getRealname()), SysUser::getRealname, user.getRealname())
+			wrapper
 		);
 
 		return new PageUtils(page);
@@ -102,6 +114,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		userEntity.setPassword(newPassword);
 		return this.update(userEntity,
 				new QueryWrapper<SysUser>().eq("username", username));
+	}
+
+	@Override
+	public boolean resetPassword(String id, String newPassword) {
+		SysUser user = this.getById(id);
+		if (user == null) {
+			return false;
+		}
+		String md5 = SaSecureUtil.md5(user.getUsername() + ":" + newPassword);
+		String encodedPassword = BCrypt.hashpw(md5, BCrypt.gensalt());
+		SysUser userEntity = new SysUser();
+		userEntity.setId(id);
+		userEntity.setPassword(encodedPassword);
+		return this.updateById(userEntity);
 	}
 
 

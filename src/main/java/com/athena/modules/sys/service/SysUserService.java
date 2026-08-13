@@ -57,4 +57,11 @@ public interface SysUserService extends IService<SysUser> {
 	 */
 	boolean updatePassword(String username, String newPassword);
 
+	/**
+	 * 管理员重置用户密码
+	 * @param id           用户ID
+	 * @param newPassword  新密码
+	 */
+	boolean resetPassword(String id, String newPassword);
+
 }

@@ -25,4 +25,6 @@ public interface SysDeptService extends IService<SysDept> {
     List<SysDeptTree> treeSelect();
 
     boolean deleteBatch(List<String> ids);
+
+    List<String> getSubDeptIds(String deptCode);
 }

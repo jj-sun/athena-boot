@@ -8,10 +8,14 @@ import com.athena.modules.sys.service.SysDeptService;
 import com.athena.modules.sys.vo.SysDeptTree;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -62,5 +66,30 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public boolean deleteBatch(List<String> ids) {
         return this.removeByIds(ids);
+    }
+
+    @Override
+    public List<String> getSubDeptIds(String deptCode) {
+        if (StringUtils.isBlank(deptCode)) {
+            return new ArrayList<>();
+        }
+        List<SysDept> allDepts = this.list();
+        Set<String> result = new HashSet<>();
+        String[] ids = deptCode.split(",");
+        for (String id : ids) {
+            if (StringUtils.isNotBlank(id)) {
+                collectDeptAndChildren(id, allDepts, result);
+            }
+        }
+        return new ArrayList<>(result);
+    }
+
+    private void collectDeptAndChildren(String deptId, List<SysDept> allDepts, Set<String> result) {
+        result.add(deptId);
+        for (SysDept dept : allDepts) {
+            if (deptId.equals(dept.getParentId())) {
+                collectDeptAndChildren(dept.getId(), allDepts, result);
+            }
+        }
     }
 }

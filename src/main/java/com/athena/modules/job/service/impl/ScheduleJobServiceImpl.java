@@ -7,6 +7,7 @@ import com.athena.common.utils.Query;
 import com.athena.modules.job.entity.ScheduleJob;
 import com.athena.modules.job.mapper.ScheduleJobMapper;
 import com.athena.modules.job.service.ScheduleJobService;
+import com.athena.modules.job.task.ITask;
 import com.athena.modules.job.utils.ScheduleUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,13 +17,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.sun
@@ -31,6 +31,9 @@ import java.util.Map;
 public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, ScheduleJob> implements ScheduleJobService {
 	@Autowired
     private Scheduler scheduler;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	/**
 	 * 项目启动时，初始化定时器
@@ -55,6 +58,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 		IPage<ScheduleJob> page = this.page(
 			new Query<ScheduleJob>().getPage(pageDto),
 			new LambdaQueryWrapper<ScheduleJob>().like(StringUtils.isNotBlank(scheduleJob.getBeanName()), ScheduleJob::getBeanName, scheduleJob.getBeanName())
+					.eq(Objects.nonNull(scheduleJob.getStatus()), ScheduleJob::getStatus, scheduleJob.getStatus())
 		);
 
 		return new PageUtils(page);
@@ -125,5 +129,45 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
     	updateBatch(jobIds, Constant.ScheduleStatus.NORMAL.getValue());
     }
+
+	@Override
+	public List<Map<String, Object>> getTaskBeanList(String excludeId) {
+		// 1. 获取所有 ITask 实现类的 Bean 名称
+		Map<String, ITask> taskBeans = applicationContext.getBeansOfType(ITask.class);
+
+		// 2. 查询数据库中已使用的 beanName（排除 excludeId 对应的记录）
+		List<ScheduleJob> allJobs = this.list();
+		Set<String> usedBeanNames = allJobs.stream()
+				.filter(job -> {
+					if (StringUtils.isBlank(excludeId)) {
+						return true;
+					}
+					// 编辑模式下，排除自身这条记录的 beanName
+					return !excludeId.equals(job.getId());
+				})
+				.map(ScheduleJob::getBeanName)
+				.filter(StringUtils::isNotBlank)
+				.collect(Collectors.toSet());
+
+		// 3. 构造返回结果
+		List<Map<String, Object>> result = new ArrayList<>();
+		for (Map.Entry<String, ITask> entry : taskBeans.entrySet()) {
+			String beanName = entry.getKey();
+			Class<?> beanClass = entry.getValue().getClass();
+			// 如果是 CGLIB 代理类，取父类
+			String className = beanClass.getSimpleName();
+			if (className.contains("$$")) {
+				className = beanClass.getSuperclass().getSimpleName();
+			}
+
+			Map<String, Object> item = new HashMap<>(3);
+			item.put("beanName", beanName);
+			item.put("className", className);
+			item.put("disabled", usedBeanNames.contains(beanName));
+			result.add(item);
+		}
+
+		return result;
+	}
     
 }

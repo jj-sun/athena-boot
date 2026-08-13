@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统用户
@@ -72,6 +73,25 @@ public class SysUserController extends AbstractController {
 			return Result.error("原密码不正确");
 		}
 		
+		return Result.ok();
+	}
+
+	/**
+	 * 管理员重置用户密码
+	 */
+	@Log("重置密码")
+	@PostMapping("/resetPassword")
+	@SaCheckPermission("sys:user:update")
+	public Result<Object> resetPassword(@RequestBody Map<String, String> params){
+		String id = params.get("id");
+		String password = params.get("password");
+		Assert.isBlank(id, "用户ID不能为空");
+		Assert.isBlank(password, "新密码不能为空");
+
+		boolean flag = sysUserService.resetPassword(id, password);
+		if(!flag){
+			return Result.error("重置密码失败");
+		}
 		return Result.ok();
 	}
 	

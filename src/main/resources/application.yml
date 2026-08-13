@@ -6,6 +6,7 @@ spring:
     active: dev
 sa-token:
   token-name: X-Access-Token
+  timeout: 1800
   is-share: false
-  jwt-secret-key: athena-boot
   is-read-cookie: false
+  token-style: random-128

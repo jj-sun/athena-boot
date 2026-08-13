@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 定时任务
@@ -43,6 +44,15 @@ public class ScheduleJobController {
 		ScheduleJob schedule = scheduleJobService.getById(jobId);
 		
 		return Result.ok(schedule);
+	}
+
+	/**
+	 * 获取可用的定时任务 Bean 列表
+	 */
+	@GetMapping("/taskBeanList")
+	public Result<List<Map<String, Object>>> taskBeanList(@RequestParam(name = "excludeId", required = false) String excludeId) {
+		List<Map<String, Object>> list = scheduleJobService.getTaskBeanList(excludeId);
+		return Result.ok(list);
 	}
 	
 	/**

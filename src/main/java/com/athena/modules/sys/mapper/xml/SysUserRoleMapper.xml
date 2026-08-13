@@ -13,4 +13,20 @@
 	<select id="queryRoleIdList" resultType="string">
 		select role_id from sys_user_role where user_id = #{value}
 	</select>
+
+	<select id="queryUserIdList" resultType="string">
+		select user_id from sys_user_role where role_id = #{value}
+	</select>
+
+	<delete id="deleteByRoleAndUserId">
+		delete from sys_user_role where role_id = #{roleId} and user_id = #{userId}
+	</delete>
+
+	<delete id="batchDeleteByRoleAndUserIds">
+		delete from sys_user_role where role_id = #{roleId} and user_id in
+		<foreach item="userId" collection="userIds" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+
 </mapper>

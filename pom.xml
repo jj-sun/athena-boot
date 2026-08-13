@@ -38,6 +38,7 @@
 		<guava.version>32.0.1-android</guava.version>
 		<jakarata.version>5.0.0-M1</jakarata.version>
 		<sa-token.version>1.45.0</sa-token.version>
+		<jimureport.version>2.5.0</jimureport.version>
 	</properties>
 
 	<dependencyManagement>
@@ -125,15 +126,20 @@
 		</dependency>
 		<dependency>
 			<groupId>cn.dev33</groupId>
+			<artifactId>sa-token-redis-template</artifactId>
+			<version>1.45.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.dev33</groupId>
 			<artifactId>sa-token-redis-jackson</artifactId>
 			<version>${sa-token.version}</version>
 		</dependency>
 		<!-- Sa-Token 整合 jwt -->
-		<dependency>
+		<!--<dependency>
 			<groupId>cn.dev33</groupId>
 			<artifactId>sa-token-jwt</artifactId>
 			<version>${sa-token.version}</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>com.baomidou</groupId>
@@ -230,6 +236,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -254,6 +261,16 @@
 			<artifactId>jspecify</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<!--<dependency>
+			<groupId>org.jeecgframework.jimureport</groupId>
+			<artifactId>jimureport-spring-boot4-starter</artifactId>
+			<version>${jimureport.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jeecgframework.jimureport</groupId>
+			<artifactId>jimubi-spring-boot4-starter</artifactId>
+			<version>${jimureport.version}</version>
+		</dependency>-->
 	</dependencies>
 
 	<build>

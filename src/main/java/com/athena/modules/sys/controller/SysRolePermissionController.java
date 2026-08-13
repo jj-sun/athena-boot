@@ -27,8 +27,8 @@ public class SysRolePermissionController {
     }
 
     @GetMapping(value = "getPermissionIdList")
-    public Result<Object> getPermissionIdList(@RequestParam(name = "id") String id) {
-        List<String> permissionIds = rolePermissionService.queryPermissionIdList(id);
+    public Result<Object> getPermissionIdList(@RequestParam(name = "roleId") String roleId) {
+        List<String> permissionIds = rolePermissionService.queryPermissionIdList(roleId);
         return Result.ok(permissionIds);
     }
 
